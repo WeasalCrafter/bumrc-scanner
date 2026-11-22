@@ -1,0 +1,23 @@
+{
+  "description": "vishay ferrite beads",
+  "distributor": "VISHAY",
+  "saved_at": "2026-11-22T19:36:08",
+  "decoded": {
+    "distributor": "VISHAY",
+    "distributor_pn": null,
+    "mpn": null,
+    "manufacturer": null,
+    "original_qty": null,
+    "lot": null,
+    "date_code": null
+  },
+  "expected": {
+    "distributor": "VISHAY"
+  },
+  "expected_todo": {
+    "distributor_pn": "ILHB0805ER121V",
+    "mpn": "ILHB0805ER121V",
+    "original_qty": 50
+  },
+  "todo_reason": "decoder missed or misread these when the capture was saved"
+}

@@ -1,0 +1,23 @@
+{
+  "description": "panasonic 0603 resistors 4.7k ohms 1%",
+  "distributor": "OTHER",
+  "saved_at": "2026-11-22T19:32:33",
+  "decoded": {
+    "distributor": "VISHAY",
+    "distributor_pn": null,
+    "mpn": null,
+    "manufacturer": null,
+    "original_qty": null,
+    "lot": null,
+    "date_code": null
+  },
+  "expected": {
+    "distributor": "VISHAY"
+  },
+  "expected_todo": {
+    "mpn": "ERJ-UP3F4701V",
+    "original_qty": 47,
+    "date_code": "2018"
+  },
+  "todo_reason": "decoder missed or misread these when the capture was saved"
+}

@@ -1,0 +1,15 @@
+{
+  "description": "panasonic 0603 resistors 4.7k ohms 1%",
+  "distributor": "OTHER",
+  "saved_at": "2026-11-22T19:34:25",
+  "decoded": {
+    "distributor": "VISHAY",
+    "distributor_pn": null,
+    "mpn": null,
+    "manufacturer": null,
+    "original_qty": null,
+    "lot": null,
+    "date_code": null
+  },
+  "expected": {}
+}

@@ -9,7 +9,7 @@ __pycache__/
 *.egg-info/
 
 # app data (camera settings, saved captures, printed labels)
-data/
+# data/
 
 # editors / OS
 .*.swp

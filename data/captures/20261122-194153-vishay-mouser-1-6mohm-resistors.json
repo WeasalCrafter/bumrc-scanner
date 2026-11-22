@@ -1,0 +1,24 @@
+{
+  "description": "mouser 1.6Mohm resistors",
+  "distributor": "VISHAY",
+  "saved_at": "2026-11-22T19:41:54",
+  "decoded": {
+    "distributor": "MOUSER",
+    "distributor_pn": null,
+    "mpn": "CRCW04021M60FKED",
+    "manufacturer": "Vishay",
+    "original_qty": 100,
+    "lot": null,
+    "date_code": null
+  },
+  "expected": {
+    "distributor": "MOUSER",
+    "mpn": "CRCW04021M60FKED",
+    "manufacturer": "Vishay",
+    "original_qty": 100
+  },
+  "expected_todo": {
+    "distributor_pn": "71-CRCW04021M60FKED"
+  },
+  "todo_reason": "decoder missed or misread these when the capture was saved"
+}
