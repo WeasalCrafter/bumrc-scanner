@@ -2,6 +2,10 @@
 so the preview stream, scanning and calibration all read the newest frame
 without fighting over the device.
 
+Frames are kept as the camera's JPEG bytes and decoded only when used: the
+full 8MP image once per frame (shared by everyone who asks), and the preview
+straight at 1/4 size.
+
 Saved settings (camera.json, written by calibration) are applied on open.
 """
 from __future__ import annotations
@@ -16,14 +20,18 @@ from pathlib import Path
 import cv2
 import numpy as np
 
-from scanner.camera.sources import Camera
+from scanner.camera.sources import Camera, to_image
 from scanner.decode.draw import draw_codes
-from scanner.decode.reader import Code, decode_frame
+from scanner.decode.reader import FAST_PASSES, Code, decode_frame
 
-PREVIEW_WIDTH = 960       # the browser preview is downscaled; decoding uses full frames
+PREVIEW_WIDTH = 800       # the browser preview is downscaled (3264 / 4 = 816); decoding uses full frames
 PREVIEW_QUALITY = 70
 OVERLAY_SECONDS = 2.0     # boxes stay on the preview this long after the last decode
-DETECT_INTERVAL = 0.3     # live detector: pause between decodes (it's CPU-heavy on the Jetson)
+DETECT_INTERVAL = 0.5     # live detector: pause between decodes, so the Jetson's CPU stays free
+# The live boxes are a guide, not the scan: 2 cheap passes (full-size read + a
+# shrunk 2D-only pass) instead of the scan's full set.
+DETECT_PASSES = [p for p in FAST_PASSES if (p.name, p.binarizer.name) in
+                 {("gray", "LocalAverage"), ("scale0.3", "GlobalHistogram")}]
 SETTLE_SECONDS = 0.6      # after applying saved settings: let the focus motor get there
 
 
@@ -48,8 +56,10 @@ class CameraManager:
         self.settings_file = settings_file
         self.lock = threading.Lock()
         self.new_frame = threading.Condition()
-        self.frame: np.ndarray | None = None
+        self._raw: np.ndarray | bytes | None = None    # newest frame as grabbed (usually JPEG bytes)
         self.frame_id = 0
+        self._decoded: tuple[int, np.ndarray] | None = None
+        self._decode_lock = threading.Lock()
         self.error: str | None = None
         self.warnings: list[str] = []
         self._thread: threading.Thread | None = None
@@ -99,7 +109,7 @@ class CameraManager:
                     t.join(timeout=5)
             self._thread = self._detector = None
             self.camera.close()
-            self.frame = None
+            self._raw = self._decoded = None
             self._preview = None
             self.show_codes([])
 
@@ -141,7 +151,7 @@ class CameraManager:
     def _grab_loop(self) -> None:
         failures = 0
         while self._running:
-            frame = self.camera.read()
+            frame = self.camera.grab()
             if frame is None:
                 failures += 1
                 if failures > 50:
@@ -150,27 +160,52 @@ class CameraManager:
                 continue
             failures = 0
             with self.new_frame:
-                self.frame = frame
+                self._raw = frame
                 self.frame_id += 1
                 self.new_frame.notify_all()
 
-    def wait_frame(self, after_id: int = -1, timeout: float = 5.0) -> tuple[int, np.ndarray]:
-        """The first frame newer than after_id (blocks until one arrives)."""
+    def _full(self, fid: int, raw) -> np.ndarray:
+        """Full-size image of frame `fid`, decoded once however many callers want it."""
+        with self._decode_lock:
+            if self._decoded and self._decoded[0] == fid:
+                return self._decoded[1]
+            img = to_image(raw)
+            if img is None:
+                raise RuntimeError("the camera sent a frame that can't be decoded")
+            self._decoded = (fid, img)
+            return img
+
+    @property
+    def frame(self) -> np.ndarray | None:
+        """Newest frame, full size (decoded on first use)."""
+        raw, fid = self._raw, self.frame_id
+        return None if raw is None else self._full(fid, raw)
+
+    def _wait_raw(self, after_id: int, timeout: float):
         deadline = time.time() + timeout
         with self.new_frame:
-            while self.frame is None or self.frame_id <= after_id:
+            while self._raw is None or self.frame_id <= after_id:
                 left = deadline - time.time()
                 if left <= 0 or not self._running:
                     raise RuntimeError(self.error or "no frame from the camera")
                 self.new_frame.wait(left)
-            return self.frame_id, self.frame
+            return self.frame_id, self._raw
 
-    def fresh_frame(self, skip: int = 1, timeout: float = 5.0) -> np.ndarray:
-        """A frame captured after now (skips `skip` frames that may predate a settings change)."""
+    def wait_frame(self, after_id: int = -1, timeout: float = 5.0) -> tuple[int, np.ndarray]:
+        """The first frame newer than after_id (blocks until one arrives)."""
+        fid, raw = self._wait_raw(after_id, timeout)
+        return fid, self._full(fid, raw)
+
+    def fresh_frame(self, skip: int = 1, timeout: float = 5.0, reduce: int = 1,
+                    gray: bool = False) -> np.ndarray:
+        """A frame captured after now (skips `skip` frames that may predate a settings
+        change). `reduce`/`gray` decode a smaller copy, e.g. for sharpness checks."""
         fid = self.frame_id
         for _ in range(skip + 1):
-            fid, frame = self.wait_frame(fid, timeout)
-        return frame
+            fid, raw = self._wait_raw(fid, timeout)
+        if reduce == 1 and not gray:
+            return self._full(fid, raw)
+        return to_image(raw, reduce, gray)
 
     # ------------------------------------------------------------ detected-code boxes
 
@@ -192,28 +227,37 @@ class CameraManager:
     def _detect_loop(self) -> None:
         fid = -1
         while self._running:
-            if not self.live_detect or self._busy or self.frame is None or self.frame_id == fid:
+            if not self.live_detect or self._busy or self._raw is None or self.frame_id == fid:
                 time.sleep(0.05)
                 continue
-            fid, frame = self.frame_id, self.frame
             try:
-                self.show_codes(decode_frame(frame))
+                fid, frame = self.frame_id, self.frame
+                codes = decode_frame(frame, passes=DETECT_PASSES)
+                if not self._busy:           # a scan started meanwhile: its boxes win
+                    self.show_codes(codes)
             except Exception:             # a bad frame must not kill the detector
                 pass
             time.sleep(DETECT_INTERVAL)
 
     def preview_jpeg(self) -> bytes | None:
-        frame, fid = self.frame, self.frame_id
-        if frame is None:
+        raw, fid = self._raw, self.frame_id
+        if raw is None:
             return None
         codes = self._overlay if time.time() - self._overlay_time < OVERLAY_SECONDS else []
         key = (fid, self._overlay_version if codes else -1)
         if self._preview and self._preview[0] == key:
             return self._preview[1]
-        h, w = frame.shape[:2]
-        k = min(1.0, PREVIEW_WIDTH / w)
-        if k < 1:
-            frame = cv2.resize(frame, (PREVIEW_WIDTH, int(h * k)), interpolation=cv2.INTER_AREA)
+        w = self.camera.size[0] if isinstance(raw, bytes) and self.camera.size else raw.shape[1]
+        reduce = max([r for r in (8, 4, 2) if w // r >= PREVIEW_WIDTH] or [1])
+        frame = to_image(raw, reduce)
+        if frame is None:
+            return None
+        k = 1 / reduce
+        if frame.shape[1] > PREVIEW_WIDTH * 1.25:          # no exact JPEG reduction fits: shrink the rest
+            h2, w2 = frame.shape[:2]
+            k2 = PREVIEW_WIDTH / w2
+            frame = cv2.resize(frame, (PREVIEW_WIDTH, int(h2 * k2)), interpolation=cv2.INTER_AREA)
+            k *= k2
         if codes:
             frame = draw_codes(frame, codes, scale=k)
         ok, buf = cv2.imencode(".jpg", frame, [cv2.IMWRITE_JPEG_QUALITY, PREVIEW_QUALITY])

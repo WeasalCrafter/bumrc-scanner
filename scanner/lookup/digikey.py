@@ -5,8 +5,9 @@ Uses DigiKey's Product Information API v4 with a client-credentials token
 and is reused until it's about to expire.
 
     dk = DigiKey()
-    product = dk.find("497-6610-1-ND")                  # DigiKey PN or MPN
-    product = dk.find("1N5819", manufacturer="STMicro")  # MPN shared by several makers
+    product, _ = dk.find("497-6610-1-ND")                    # DigiKey PN or MPN
+    product, makers = dk.find("LM358DR", manufacturer="TI")  # MPN made by several companies;
+                                                             # makers = choices if still unclear
     fields = to_fields(product)
 """
 from __future__ import annotations
@@ -76,37 +77,88 @@ class DigiKey:
         raise DigiKeyError(f"DigiKey lookup failed ({r.status_code})")
 
     def exact_matches(self, mpn: str) -> list[dict]:
-        r = self._get("POST", f"{API}/search/keyword", json={"Keywords": mpn, "Limit": 10})
+        r = self._get("POST", f"{API}/search/keyword", json={"Keywords": mpn, "Limit": 50})
         if r.status_code != 200:
             raise DigiKeyError(f"DigiKey search failed ({r.status_code})")
         body = r.json()
         return [p for p in (body.get("ExactMatches") or []) + (body.get("Products") or [])
                 if (p.get("ManufacturerProductNumber") or "").upper() == mpn.upper()]
 
-    def find(self, part_number: str, manufacturer: str | None = None) -> dict | None:
-        """Product for a DigiKey PN or MPN. If several manufacturers make that MPN,
-        pick the one whose name matches `manufacturer` (None if still unclear)."""
+    def find(self, part_number: str, manufacturer: str | None = None) -> tuple[dict | None, list[str]]:
+        """(product, candidate manufacturers) for a DigiKey PN or MPN.
+
+        Many MPNs (LM358DR, BAT54, 2N7002...) are made by several companies. Then
+        `manufacturer` (from the label, or picked by the user) chooses one; if it
+        can't, product is None and the candidates are the makers DigiKey lists,
+        so the user can pick."""
         if not part_number:
-            return None
+            return None, []
         product = self.details(part_number)
         if product:
-            return product
+            return product, []
         matches = self.exact_matches(part_number)
         if manufacturer:
-            m = _norm(manufacturer)
-            matches = [p for p in matches if _norm(p.get("Manufacturer", {}).get("Name", "")).startswith(m[:5])]
-        makers = {p.get("Manufacturer", {}).get("Name") for p in matches}
+            chosen = [p for p in matches if same_manufacturer(manufacturer, _maker(p))]
+            if chosen:
+                matches = chosen
+        makers = sorted({_maker(p) for p in matches})
         if len(makers) == 1:
             # keyword results are summaries; fetch the full record via its DigiKey PN
             variations = matches[0].get("ProductVariations") or []
             if variations:
-                return self.details(variations[0]["DigiKeyProductNumber"]) or matches[0]
-            return matches[0]
-        return None
+                return self.details(variations[0]["DigiKeyProductNumber"]) or matches[0], []
+            return matches[0], []
+        return None, makers
 
 
-def _norm(s: str) -> str:
-    return re.sub(r"[^a-z0-9]", "", s.lower().replace("ü", "u"))
+def _maker(p: dict) -> str:
+    return (p.get("Manufacturer") or {}).get("Name") or ""
+
+
+# ---------------------------------------------------------------- manufacturer names
+
+# Words that don't identify a company. "Devices", "Instruments" etc. are kept:
+# they're part of names like Analog Devices / Texas Instruments.
+_FILLER = {"inc", "incorporated", "corp", "corporation", "co", "company", "ltd", "limited", "llc", "lp",
+           "gmbh", "ag", "sa", "nv", "bv", "plc", "kk", "the", "and", "of", "electronics", "electronic",
+           "elektronik", "semiconductor", "semiconductors", "semi", "technology", "technologies", "tech",
+           "industries", "industry", "industrial", "components", "products", "international", "intl",
+           "group", "america", "americas", "usa", "us", "na", "sales", "holdings", "division", "global",
+           "manufacturing", "mfg", "systems", "solutions", "va"}
+
+# common short forms on labels -> the name DigiKey uses (both sides are normalized)
+_ALIASES = {
+    "ti": "texas instruments", "on": "onsemi", "on semiconductor": "onsemi", "fairchild": "onsemi",
+    "st": "stmicroelectronics", "stmicro": "stmicroelectronics", "stm": "stmicroelectronics",
+    "adi": "analog devices", "linear": "analog devices", "maxim": "analog devices", "maxim integrated": "analog devices",
+    "we": "wurth", "wuerth": "wurth", "avx": "kyocera avx", "ixys": "littelfuse", "atmel": "microchip",
+    "microchip technology": "microchip", "nxp usa": "nxp", "freescale": "nxp", "rohm": "rohm",
+    "murata manufacturing": "murata", "samsung electro mechanics": "samsung", "sem": "samsung",
+    "yageo": "yageo", "kemet": "kemet", "te": "te connectivity", "amp": "te connectivity",
+}
+
+
+def manufacturer_key(name: str) -> str:
+    """Comparable form of a company name: 'SCIENTIFIC COMPONENTS CORPORATION DBA
+    MINI-CIRCUITS (VA)' -> 'mini circuits', 'Würth Elektronik' -> 'wurth'."""
+    s = name.lower().replace("ü", "u").replace("ö", "o").replace("&", " and ")
+    if " dba " in f" {s} ":                       # "X doing business as Y": Y is the brand
+        s = s.split("dba", 1)[1]
+    s = re.sub(r"\(.*?\)", " ", s)                 # drop "(VA)" etc.
+    words = [w for w in re.split(r"[^a-z0-9]+", s) if w and w not in _FILLER]
+    key = " ".join(words)
+    return _ALIASES.get(key, key)
+
+
+def same_manufacturer(a: str, b: str) -> bool:
+    """True if two spellings name the same company ('Vishay' / 'Vishay Dale', 'TI' / 'Texas Instruments')."""
+    ka, kb = manufacturer_key(a), manufacturer_key(b)
+    if not ka or not kb:
+        return False
+    # all words of the shorter name appear in the longer one: "vishay" in "vishay dale",
+    # but "analog devices" is not "analog power"
+    wa, wb = set(ka.split()), set(kb.split())
+    return wa <= wb or wb <= wa
 
 
 # ---------------------------------------------------------------- DigiKey product -> inventory fields

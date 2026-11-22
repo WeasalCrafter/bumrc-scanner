@@ -6,6 +6,8 @@ when both exist, so a lookup can never silently change the part number.
 """
 from __future__ import annotations
 
+from typing import NamedTuple
+
 from scanner.decode.parse import REQUIRED
 from scanner.lookup.digikey import DigiKey, DigiKeyError, to_fields
 
@@ -24,25 +26,34 @@ def lookup_keys(fields: dict) -> list[str]:
     return keys
 
 
-def enrich(fields: dict, dk: DigiKey | None = None) -> tuple[dict, str | None]:
-    """(updated fields, problem message or None). Never raises for network/API trouble."""
+class Enriched(NamedTuple):
+    fields: dict
+    problem: str | None = None                       # shown to the user; None = all good
+    candidates: list[str] = []                       # makers to choose from when the MPN is ambiguous
+
+
+def enrich(fields: dict, dk: DigiKey | None = None) -> Enriched:
+    """Look the bag up on DigiKey and fill in catalog fields. Never raises for network/API trouble."""
     dk = dk or DigiKey()
     out = dict(fields)
     if not dk.configured:
-        return out, "DigiKey API keys not set; catalog details not filled in"
+        return Enriched(out, "DigiKey API keys not set; catalog details not filled in")
     keys = lookup_keys(fields)
     if not keys:
-        return out, "no part number to look up"
+        return Enriched(out, "no part number to look up")
+    product, candidates = None, []
     try:
-        product = None
         for k in keys:
-            product = dk.find(k, manufacturer=fields.get("manufacturer"))
-            if product:
+            product, candidates = dk.find(k, manufacturer=fields.get("manufacturer"))
+            if product or candidates:
                 break
     except DigiKeyError as e:
-        return out, str(e)
+        return Enriched(out, str(e))
+    if candidates:
+        return Enriched(out, f"{keys[-1]} is made by {len(candidates)} manufacturers on DigiKey; pick the right one",
+                        candidates)
     if not product:
-        return out, f"{keys[-1]} not found on DigiKey (or several makers use that number)"
+        return Enriched(out, f"{keys[-1]} not found on DigiKey")
 
     found = to_fields(product)
     for k in CATALOG:
@@ -50,7 +61,7 @@ def enrich(fields: dict, dk: DigiKey | None = None) -> tuple[dict, str | None]:
             out[k] = found[k]
     if not out.get("mpn"):
         out["mpn"] = found.get("mpn")
-    return out, None
+    return Enriched(out)
 
 
 def missing(fields: dict) -> list[str]:

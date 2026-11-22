@@ -206,7 +206,26 @@ function showReview(data) {
         d.textContent = t;
         $("review-msg").append(d);
     }
+    if ((data.manufacturer_choices || []).length) $("review-msg").append(manufacturerPicker(data.manufacturer_choices));
     showStep("review");
+}
+
+// Several companies make this MPN: one button per maker DigiKey lists.
+function manufacturerPicker(makers) {
+    const box = document.createElement("div");
+    box.className = "msg warn picker";
+    box.append("Which manufacturer is on the bag? ");
+    for (const name of makers) {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.textContent = name;
+        b.addEventListener("click", () => {
+            $("fields").elements.manufacturer.value = name;
+            doLookup();
+        });
+        box.append(b);
+    }
+    return box;
 }
 
 function lockTabs(on) { for (const b of document.querySelectorAll(".tabs button")) b.disabled = on; }
@@ -393,8 +412,8 @@ function showCalibrationResult(r) {
     msg(box, `Best: ${best} (${r.best_codes} codes). Press Save settings to keep it.`, r.best_codes ? "ok" : "warn");
     for (const n of r.notes) { const p = document.createElement("p"); p.className = "muted"; p.textContent = n; box.append(p); }
     const t = document.createElement("table");
-    t.innerHTML = "<tr><th>Stage</th><th>Focus</th><th>Sharpness</th><th>Codes</th><th>Detail</th></tr>";
-    for (const p of r.points) {
+    t.innerHTML = "<tr><th>Stage</th><th>Focus</th><th>Sharpness</th><th>Codes</th><th>Image sharpness</th></tr>";
+    for (const p of r.points.filter(p => p.codes !== null)) {    // sharpness-only sweep steps are left out
         const tr = t.insertRow();
         if (p.focus === r.best.focus && p.sharpness === r.best.sharpness) tr.className = "best";
         for (const v of [p.stage, p.focus ?? "—", p.sharpness ?? "—", p.codes, Math.round(p.focus_measure)])

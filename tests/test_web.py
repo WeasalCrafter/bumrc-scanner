@@ -40,7 +40,7 @@ def test_page_and_static(client):
 
 
 def test_scan_decodes_and_closes_camera(client, monkeypatch):
-    monkeypatch.setattr(webapp, "enrich", lambda f, dk: (f, "skipped in tests"))
+    monkeypatch.setattr(webapp, "enrich", lambda f, dk: webapp.Enriched(f, "skipped in tests"))
     r = client.post("/api/scan").json()
     assert r["fields"]["mpn"] == "EHR-3" and r["fields"]["original_qty"] == 50
     assert r["missing"] == [] and r["frames"] >= 1

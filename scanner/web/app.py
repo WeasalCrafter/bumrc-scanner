@@ -29,7 +29,7 @@ from scanner.decode.reader import decode_frame
 from scanner.labels import printer
 from scanner.labels.store import save_label
 from scanner.lookup.digikey import DigiKey
-from scanner.lookup.enrich import enrich, missing
+from scanner.lookup.enrich import Enriched, enrich, missing
 from scanner.scan import scan
 
 STATIC = Path(__file__).parent / "static"
@@ -214,9 +214,10 @@ def create_app(env: dict | None = None) -> FastAPI:
             s = await run_in_threadpool(run_camera, scan, cam)
         finally:
             await run_in_threadpool(cam.close)
-        fields, problem = await run_in_threadpool(enrich, s.result.fields, dk)
+        e = await run_in_threadpool(enrich, s.result.fields, dk)
         app.state.snapshot = s.snapshot
-        return {"fields": fields, "missing": missing(fields), "lookup_problem": problem,
+        return {"fields": e.fields, "missing": missing(e.fields), "lookup_problem": e.problem,
+                "manufacturer_choices": e.candidates,
                 "camera_warnings": camera_warnings,
                 "codes": [c.to_dict() for c in s.result.codes], "frames": s.frames, "seconds": s.seconds}
 
@@ -230,8 +231,9 @@ def create_app(env: dict | None = None) -> FastAPI:
 
     @app.post("/api/lookup")
     async def lookup(body: Fields):
-        fields, problem = await run_in_threadpool(enrich, body.fields, dk)
-        return {"fields": fields, "missing": missing(fields), "lookup_problem": problem}
+        e = await run_in_threadpool(enrich, body.fields, dk)
+        return {"fields": e.fields, "missing": missing(e.fields), "lookup_problem": e.problem,
+                "manufacturer_choices": e.candidates}
 
 
     @app.post("/api/upload")

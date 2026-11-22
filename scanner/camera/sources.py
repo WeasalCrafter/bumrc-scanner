@@ -21,6 +21,27 @@ from scanner.camera.controls import Control
 from scanner.config import ROOT
 
 FULL_SIZE = (3264, 2448)     # Arducam UC-A52, 8MP
+JPEG_START = b"\xff\xd8"
+
+
+def to_image(frame: np.ndarray | bytes | None, reduce: int = 1, gray: bool = False) -> np.ndarray | None:
+    """Decode a grabbed frame. `reduce` = 2, 4 or 8 decodes JPEGs straight to that
+    fraction of the size (much faster than decoding fully and shrinking)."""
+    if frame is None:
+        return None
+    if isinstance(frame, bytes):
+        flag = {(1, False): cv2.IMREAD_COLOR, (2, False): cv2.IMREAD_REDUCED_COLOR_2,
+                (4, False): cv2.IMREAD_REDUCED_COLOR_4, (8, False): cv2.IMREAD_REDUCED_COLOR_8,
+                (1, True): cv2.IMREAD_GRAYSCALE, (2, True): cv2.IMREAD_REDUCED_GRAYSCALE_2,
+                (4, True): cv2.IMREAD_REDUCED_GRAYSCALE_4, (8, True): cv2.IMREAD_REDUCED_GRAYSCALE_8}[(reduce, gray)]
+        return cv2.imdecode(np.frombuffer(frame, np.uint8), flag)
+    img = frame
+    if gray and img.ndim == 3:
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    if reduce > 1:
+        h, w = img.shape[:2]
+        img = cv2.resize(img, (-(-w // reduce), -(-h // reduce)), interpolation=cv2.INTER_AREA)
+    return img
 
 
 class Camera:
@@ -30,6 +51,11 @@ class Camera:
     def open(self) -> None: ...
     def close(self) -> None: ...
     def read(self) -> np.ndarray | None: ...
+
+    def grab(self) -> np.ndarray | bytes | None:
+        """The next frame as cheaply as possible: JPEG bytes if the camera sends
+        them (decode later with `to_image`), else a decoded image."""
+        return self.read()
     def controls(self) -> dict[str, Control]: return {}
     def set(self, name: str, value: int) -> None: ...
 
@@ -53,6 +79,9 @@ class V4L2Camera(Camera):
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.want_size[0])
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.want_size[1])
         cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)                              # always hand out a fresh frame
+        # Hand over the camera's JPEG untouched: decoding every 8MP frame at 15 fps
+        # would eat most of the Jetson's CPU. Frames are decoded only when used.
+        cap.set(cv2.CAP_PROP_CONVERT_RGB, 0)
         self.cap = cap
 
     def close(self) -> None:
@@ -60,11 +89,21 @@ class V4L2Camera(Camera):
             self.cap.release()
             self.cap = None
 
-    def read(self) -> np.ndarray | None:
+    def grab(self) -> np.ndarray | bytes | None:
         if self.cap is None:
             return None
         ok, frame = self.cap.read()
-        return frame if ok else None
+        if not ok or frame is None:
+            return None
+        if frame.ndim == 1 or (frame.ndim == 2 and frame.shape[0] == 1):   # a 1-row byte buffer
+            buf = frame.reshape(-1)
+            if buf[:2].tobytes() == JPEG_START:
+                return buf.tobytes()
+            return None                  # raw bytes that aren't a JPEG: can't use them
+        return frame                     # driver ignored CONVERT_RGB=0 and decoded it already
+
+    def read(self) -> np.ndarray | None:
+        return to_image(self.grab())
 
     @property
     def size(self):

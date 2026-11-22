@@ -62,13 +62,47 @@ def test_settings_applied_on_open(tmp_path):
 
 
 def test_calibration_finds_simulated_focus(mgr, monkeypatch):
-    monkeypatch.setattr("scanner.camera.calibrate.SETTLE_SECONDS", 0)
+    for name in ("SETTLE_SECONDS", "PARK_SECONDS"):
+        monkeypatch.setattr(f"scanner.camera.calibrate.{name}", 0)
     seen = []
     r = calibrate(mgr, progress=lambda f, m: seen.append(f))
-    # the file camera is sharpest at 420; anything that decodes the code nearby is fine
-    assert abs(r.best["focus"] - FileCamera.BEST_FOCUS) <= 120
+    # the file camera adds no blur within 18 of 420, so anything in that flat top is right
+    assert abs(r.best["focus"] - FileCamera.BEST_FOCUS) <= 20
+    lo, hi = r.focus_band
+    assert lo <= FileCamera.BEST_FOCUS <= hi and hi - lo < 200
     assert r.best_codes >= 1 and "sharpness" in r.best
-    assert seen[-1] == 1.0
+    assert seen[-1] == 1.0 and seen == sorted(seen)
+
+
+def test_steps_cover_the_whole_range():
+    from scanner.camera.calibrate import _steps
+    assert _steps(1, 1023, 20)[:2] == [1, 21] and _steps(1, 1023, 20)[-1] == 1023
+    assert _steps(0, 1000, 2, unit=5) == list(range(0, 1001, 5))     # never finer than the control allows
+
+
+def test_raw_jpeg_frames_decoded_on_demand(tmp_path):
+    """The real camera hands over JPEG bytes; frames and the preview must still work."""
+    import cv2
+    from scanner.camera.sources import to_image
+
+    class JpegCamera(FileCamera):
+        def grab(self):
+            img = super().read()
+            return cv2.imencode(".jpg", img)[1].tobytes()
+
+    cam = JpegCamera(REFERENCE_CAPTURES)
+    m = CameraManager(cam, tmp_path / "camera.json")
+    m.open()
+    try:
+        fid, frame = m.wait_frame()
+        assert frame.shape[:2] == cam.image.shape[:2]
+        assert m.wait_frame(fid - 1)[1] is frame                 # decoded once, shared
+        assert m.preview_jpeg()[:2] == b"\xff\xd8"
+        small = m.fresh_frame(reduce=2, gray=True)
+        assert small.ndim == 2 and abs(small.shape[1] - cam.image.shape[1] / 2) <= 1
+    finally:
+        m.close()
+    assert to_image(None) is None
 
 
 def test_live_detector_boxes_codes(mgr):
