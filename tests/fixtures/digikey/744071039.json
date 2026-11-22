@@ -1,0 +1,175 @@
+{
+ "Product": {
+  "Description": {
+   "ProductDescription": "FIXED IND 3.9UH 4.9A 17 MOHM SMD",
+   "DetailedDescription": "3.9 µH Shielded Drum Core, Wirewound Inductor 4.9 A 17mOhm Max Nonstandard"
+  },
+  "Manufacturer": {
+   "Id": 732,
+   "Name": "Würth Elektronik"
+  },
+  "ManufacturerProductNumber": "744071039",
+  "ProductUrl": "https://www.digikey.com/en/products/detail/würth-elektronik/744071039/3074004",
+  "DatasheetUrl": "https://www.we-online.com/components/products/datasheet/744071039.pdf",
+  "Parameters": [
+   {
+    "ParameterId": 183,
+    "ParameterText": "Type",
+    "ParameterType": "String",
+    "ValueId": "694884",
+    "ValueText": "Drum Core, Wirewound"
+   },
+   {
+    "ParameterId": 1221,
+    "ParameterText": "Material - Core",
+    "ParameterType": "String",
+    "ValueId": "346647",
+    "ValueText": "Ferrite"
+   },
+   {
+    "ParameterId": 2087,
+    "ParameterText": "Inductance",
+    "ParameterType": "UnitOfMeasure",
+    "ValueId": "3.9 µH",
+    "ValueText": "3.9 µH"
+   },
+   {
+    "ParameterId": 3,
+    "ParameterText": "Tolerance",
+    "ParameterType": "String",
+    "ValueId": "2206",
+    "ValueText": "±30%"
+   },
+   {
+    "ParameterId": 2088,
+    "ParameterText": "Current Rating (Amps)",
+    "ParameterType": "UnitOfMeasure",
+    "ValueId": "4.9 A",
+    "ValueText": "4.9 A"
+   },
+   {
+    "ParameterId": 1219,
+    "ParameterText": "Current - Saturation (Isat)",
+    "ParameterType": "String",
+    "ValueId": "208238",
+    "ValueText": "4.5A"
+   },
+   {
+    "ParameterId": 80,
+    "ParameterText": "Shielding",
+    "ParameterType": "String",
+    "ValueId": "402031",
+    "ValueText": "Shielded"
+   },
+   {
+    "ParameterId": 314,
+    "ParameterText": "DC Resistance (DCR)",
+    "ParameterType": "String",
+    "ValueId": "112494",
+    "ValueText": "17mOhm Max"
+   },
+   {
+    "ParameterId": 705,
+    "ParameterText": "Q @ Freq",
+    "ParameterType": "String",
+    "ValueId": "1",
+    "ValueText": "-"
+   },
+   {
+    "ParameterId": 706,
+    "ParameterText": "Frequency - Self Resonant",
+    "ParameterType": "String",
+    "ValueId": "214890",
+    "ValueText": "40MHz"
+   },
+   {
+    "ParameterId": 707,
+    "ParameterText": "Ratings",
+    "ParameterType": "String",
+    "ValueId": "1",
+    "ValueText": "-"
+   },
+   {
+    "ParameterId": 252,
+    "ParameterText": "Operating Temperature",
+    "ParameterType": "String",
+    "ValueId": "212478",
+    "ValueText": "-40°C ~ 125°C"
+   },
+   {
+    "ParameterId": 1222,
+    "ParameterText": "Inductance Frequency - Test",
+    "ParameterType": "UnitOfMeasure",
+    "ValueId": "100 kHz",
+    "ValueText": "100 kHz"
+   },
+   {
+    "ParameterId": 69,
+    "ParameterText": "Mounting Type",
+    "ParameterType": "String",
+    "ValueId": "409393",
+    "ValueText": "Surface Mount"
+   },
+   {
+    "ParameterId": 16,
+    "ParameterText": "Package / Case",
+    "ParameterType": "String",
+    "ValueId": "380434",
+    "ValueText": "Nonstandard"
+   },
+   {
+    "ParameterId": 1291,
+    "ParameterText": "Supplier Device Package",
+    "ParameterType": "String",
+    "ValueId": "1",
+    "ValueText": "-"
+   },
+   {
+    "ParameterId": 46,
+    "ParameterText": "Size / Dimension",
+    "ParameterType": "String",
+    "ValueId": "18858",
+    "ValueText": "0.315\" L x 0.315\" W (8.00mm x 8.00mm)"
+   },
+   {
+    "ParameterId": 1500,
+    "ParameterText": "Height - Seated (Max)",
+    "ParameterType": "String",
+    "ValueId": "13177",
+    "ValueText": "0.181\" (4.60mm)"
+   }
+  ],
+  "Category": {
+   "CategoryId": 4,
+   "ParentId": 0,
+   "Name": "Inductors, Coils, Chokes",
+   "ProductCount": 0,
+   "NewProductCount": 0,
+   "ChildCategories": [
+    {
+     "CategoryId": 71,
+     "ParentId": 4,
+     "Name": "Fixed Inductors",
+     "ProductCount": 0,
+     "NewProductCount": 0,
+     "ChildCategories": []
+    }
+   ]
+  },
+  "ProductVariations": [
+   {
+    "DigiKeyProductNumber": "732-3713-2-ND"
+   },
+   {
+    "DigiKeyProductNumber": "732-3713-1-ND"
+   },
+   {
+    "DigiKeyProductNumber": "732-3713-6-ND"
+   }
+  ],
+  "Series": {
+   "Id": 4383,
+   "Name": "WE-TPC"
+  }
+ }
+}

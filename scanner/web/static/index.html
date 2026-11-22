@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BUMRC Scanner</title>
+    <link rel="icon" href="/static/mrc-logo.svg">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<header>
+    <img class="logo" src="/static/mrc-logo.svg" alt="">
+    <h1>BUMRC Parts Scanner</h1>
+    <div class="chips" id="chips"></div>
+    <nav class="tabs">
+        <button data-tab="scan" class="active">Scan</button>
+        <button data-tab="calibrate">Camera</button>
+    </nav>
+</header>
+
+<div class="layout">
+    <!-- left: camera feed, scan snapshot, or label preview -->
+    <section class="view">
+        <div class="view-box">
+            <img id="view-img" alt="" hidden>
+            <div id="view-empty" class="view-empty">Camera is off</div>
+        </div>
+        <p class="view-caption" id="view-caption"></p>
+    </section>
+
+    <!-- right: forms -->
+    <section class="side">
+
+        <!-- ============ SCAN TAB ============ -->
+        <div class="tab" id="tab-scan">
+            <label class="member">Your name <input id="member" autocomplete="off" placeholder="who is adding bags"></label>
+
+            <div class="step" id="step-idle">
+                <h2>Scan a bag</h2>
+                <p class="muted">Hold the bag's label in front of the camera, then press Scan.</p>
+                <button class="button big" id="btn-scan">Scan bag</button>
+            </div>
+
+            <div class="step" id="step-scanning" hidden>
+                <h2>Scanning&hellip;</h2>
+                <p class="muted">Keep the label still and in view.</p>
+                <div class="spinner"></div>
+            </div>
+
+            <div class="step" id="step-review" hidden>
+                <h2>Check the details</h2>
+                <p class="muted">Fix anything wrong or missing, then upload. Fields in red are required.</p>
+                <div id="review-msg"></div>
+                <form id="fields" class="fields" autocomplete="off"></form>
+                <details class="codes">
+                    <summary>Decoded codes (<span id="code-count">0</span>)</summary>
+                    <ul id="code-list"></ul>
+                </details>
+                <div class="actions">
+                    <button type="button" id="btn-rescan">Rescan</button>
+                    <button type="button" id="btn-lookup">Look up on DigiKey</button>
+                    <button type="button" class="button" id="btn-upload">Upload</button>
+                </div>
+            </div>
+
+            <div class="step" id="step-label" hidden>
+                <h2>Uploaded as ID <span id="item-id"></span></h2>
+                <p class="muted">The label preview is on the left. You can change the text before printing.</p>
+                <label>Label text <input id="label-name" maxlength="120"></label>
+                <div id="label-msg"></div>
+                <div class="actions">
+                    <button type="button" class="button" id="btn-print">Print label</button>
+                    <button type="button" id="btn-finish" hidden>Finish</button>
+                </div>
+            </div>
+
+            <div class="step" id="step-done" hidden>
+                <h2>Done</h2>
+                <p class="ok-msg" id="done-msg"></p>
+                <button class="button big" id="btn-next">Scan next bag</button>
+            </div>
+        </div>
+
+        <!-- ============ CAMERA TAB ============ -->
+        <div class="tab" id="tab-calibrate" hidden>
+            <h2>Camera</h2>
+            <div class="actions">
+                <button type="button" class="button" id="btn-cam-open">Open camera</button>
+                <button type="button" id="btn-cam-close">Close camera</button>
+                <button type="button" id="btn-next-image" hidden>Next test image</button>
+            </div>
+            <p class="muted" id="cam-info"></p>
+
+            <h3>Auto calibrate</h3>
+            <p class="muted">Hold a bag with several codes in view. This sweeps focus and sharpness and keeps
+                the setting that decodes the most codes.</p>
+            <div class="actions">
+                <button type="button" id="btn-calibrate">Start</button>
+                <button type="button" id="btn-calibrate-cancel" hidden>Cancel</button>
+            </div>
+            <div class="progress" id="calib-progress" hidden><div></div></div>
+            <p class="muted" id="calib-msg"></p>
+            <div id="calib-result"></div>
+
+            <h3>Manual tuning</h3>
+            <div id="controls" class="controls"><p class="muted">Open the camera to see its controls.</p></div>
+            <div class="actions">
+                <button type="button" class="button" id="btn-save-settings">Save settings</button>
+            </div>
+            <p class="muted" id="settings-msg"></p>
+
+            <h3>Save capture</h3>
+            <p class="muted">Saves the current frame as a test case for the decoder.</p>
+            <label>Description <input id="cap-desc" placeholder="e.g. DigiKey bag, 10k 0603 resistor"></label>
+            <label>Distributor <select id="cap-dist"></select></label>
+            <div class="actions">
+                <button type="button" id="btn-capture">Save capture</button>
+            </div>
+            <div id="cap-confirm"></div>
+        </div>
+    </section>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

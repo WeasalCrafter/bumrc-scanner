@@ -1,0 +1,14 @@
+{
+  "description": "Mouser bag, Wurth 3.9uH inductor (2D code has no MPN)",
+  "distributor": "MOUSER",
+  "expected": {
+    "distributor": "MOUSER",
+    "original_qty": 5,
+    "manufacturer": "Wurth",
+    "name": "3.9UH INDUCTOR"
+  },
+  "expected_todo": {
+    "mpn": "744071039"
+  },
+  "todo_reason": "Mouser's 2D code omits the MPN; needs a Mouser/DigiKey lookup"
+}

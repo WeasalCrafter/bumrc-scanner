@@ -1,0 +1,143 @@
+{
+ "Product": {
+  "Description": {
+   "ProductDescription": "CONN RCPT HSG 3POS 2.50MM",
+   "DetailedDescription": "3 Position Rectangular Housing Connector Receptacle Natural 0.098\" (2.50mm)"
+  },
+  "Manufacturer": {
+   "Id": 455,
+   "Name": "JST Sales America Inc."
+  },
+  "ManufacturerProductNumber": "EHR-3",
+  "ProductUrl": "https://www.digikey.com/en/products/detail/jst-sales-america-inc/EHR-3/527225",
+  "DatasheetUrl": "https://www.jst-mfg.com/product/pdf/eng/eEH.pdf",
+  "Parameters": [
+   {
+    "ParameterId": 28,
+    "ParameterText": "Connector Type",
+    "ParameterType": "String",
+    "ValueId": "392960",
+    "ValueText": "Receptacle"
+   },
+   {
+    "ParameterId": 512,
+    "ParameterText": "Contact Type",
+    "ParameterType": "String",
+    "ValueId": "346565",
+    "ValueText": "Female Socket"
+   },
+   {
+    "ParameterId": 88,
+    "ParameterText": "Number of Positions",
+    "ParameterType": "String",
+    "ValueId": "169295",
+    "ValueText": "3"
+   },
+   {
+    "ParameterId": 89,
+    "ParameterText": "Pitch",
+    "ParameterType": "String",
+    "ValueId": "9420",
+    "ValueText": "0.098\" (2.50mm)"
+   },
+   {
+    "ParameterId": 2172,
+    "ParameterText": "Number of Rows",
+    "ParameterType": "Double",
+    "ValueId": "1",
+    "ValueText": "1"
+   },
+   {
+    "ParameterId": 563,
+    "ParameterText": "Row Spacing",
+    "ParameterType": "String",
+    "ValueId": "1",
+    "ValueText": "-"
+   },
+   {
+    "ParameterId": 69,
+    "ParameterText": "Mounting Type",
+    "ParameterType": "String",
+    "ValueId": "349292",
+    "ValueText": "Free Hanging (In-Line)"
+   },
+   {
+    "ParameterId": 31,
+    "ParameterText": "Contact Termination",
+    "ParameterType": "String",
+    "ValueId": "334919",
+    "ValueText": "Crimp"
+   },
+   {
+    "ParameterId": 518,
+    "ParameterText": "Fastening Type",
+    "ParameterType": "String",
+    "ValueId": "1",
+    "ValueText": "-"
+   },
+   {
+    "ParameterId": 37,
+    "ParameterText": "Color",
+    "ParameterType": "String",
+    "ValueId": "378855",
+    "ValueText": "Natural"
+   },
+   {
+    "ParameterId": 5,
+    "ParameterText": "Features",
+    "ParameterType": "String",
+    "ValueId": "1",
+    "ValueText": "-"
+   },
+   {
+    "ParameterId": 2023,
+    "ParameterText": "Insulation Material",
+    "ParameterType": "String",
+    "ValueId": "388406",
+    "ValueText": "Polyamide (PA66), Nylon 6/6"
+   },
+   {
+    "ParameterId": 252,
+    "ParameterText": "Operating Temperature",
+    "ParameterType": "String",
+    "ValueId": "156454",
+    "ValueText": "-25°C ~ 85°C"
+   }
+  ],
+  "Category": {
+   "CategoryId": 20,
+   "ParentId": 0,
+   "Name": "Connectors, Interconnects",
+   "ProductCount": 0,
+   "NewProductCount": 0,
+   "ChildCategories": [
+    {
+     "CategoryId": 2027,
+     "ParentId": 20,
+     "Name": "Rectangular Connectors",
+     "ProductCount": 0,
+     "NewProductCount": 0,
+     "ChildCategories": [
+      {
+       "CategoryId": 319,
+       "ParentId": 2027,
+       "Name": "Rectangular Connector Housings",
+       "ProductCount": 0,
+       "NewProductCount": 0,
+       "ChildCategories": []
+      }
+     ]
+    }
+   ]
+  },
+  "ProductVariations": [
+   {
+    "DigiKeyProductNumber": "455-1001-ND"
+   }
+  ],
+  "Series": {
+   "Id": 3740,
+   "Name": "EH"
+  }
+ }
+}

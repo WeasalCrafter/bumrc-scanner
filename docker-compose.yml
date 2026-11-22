@@ -1,0 +1,22 @@
+# Start:   docker compose up -d --build      Logs:  docker compose logs -f
+services:
+  scanner:
+    build: .
+    image: bumrc-scanner
+    restart: unless-stopped          # comes back after a reboot or crash
+    network_mode: host               # UI at http://localhost:8080 on the Jetson
+    runtime: runc                    # JetPack defaults to the nvidia runtime; this app doesn't use the GPU
+    env_file: .env
+    environment:
+      DATA_DIR: /data
+    volumes:
+      - ./data:/data                 # camera settings, saved captures, last 5 labels
+      - /dev:/dev                    # camera and printer, even if plugged in after start
+    device_cgroup_rules:
+      - "c 81:* rmw"                 # video devices (/dev/video*)
+      - "c 180:* rmw"                # USB printers (/dev/usb/lp*)
+    # run as the Jetson user so files in ./data stay editable; 44 = video, 7 = lp
+    user: "${UID:-1000}:${GID:-1000}"
+    group_add:
+      - "44"
+      - "7"

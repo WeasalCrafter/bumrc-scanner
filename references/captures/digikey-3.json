@@ -1,0 +1,12 @@
+{
+  "description": "DigiKey bag, Stackpole 1k 1/4W axial resistor",
+  "distributor": "DIGIKEY",
+  "expected": {},
+  "expected_todo": {
+    "distributor": "DIGIKEY",
+    "distributor_pn": "CF14JT1K00CT-ND",
+    "mpn": "CF14JT1K00",
+    "original_qty": 30
+  },
+  "todo_reason": "2D code too blurry to decode at this resolution"
+}

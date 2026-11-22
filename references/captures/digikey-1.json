@@ -1,0 +1,14 @@
+{
+  "description": "DigiKey bag, TDK 1uF 0603 MLCC",
+  "distributor": "DIGIKEY",
+  "expected": {},
+  "expected_todo": {
+    "distributor": "DIGIKEY",
+    "distributor_pn": "445-C1608X7R2A105K080ACCT-ND",
+    "mpn": "C1608X7R2A105K080AC",
+    "original_qty": 4,
+    "lot": "0844951914",
+    "date_code": "2535"
+  },
+  "todo_reason": "2D code too blurry to decode at this resolution"
+}

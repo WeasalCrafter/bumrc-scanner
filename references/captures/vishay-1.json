@@ -1,0 +1,13 @@
+{
+  "description": "Vishay bag, ILHB0805ER121V ferrite bead",
+  "distributor": "VISHAY",
+  "expected": {
+    "distributor": "VISHAY"
+  },
+  "expected_todo": {
+    "mpn": "ILHB0805ER121V",
+    "original_qty": 50,
+    "date_code": "2431"
+  },
+  "todo_reason": "Vishay's 2D code only holds a shipment ID; PN/qty are in 1D codes too blurry to read"
+}

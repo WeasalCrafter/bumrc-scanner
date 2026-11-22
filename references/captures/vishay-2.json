@@ -1,0 +1,13 @@
+{
+  "description": "Vishay bag, RCS06034K99FKEA 4.99k 0603 resistor",
+  "distributor": "VISHAY",
+  "expected": {
+    "distributor": "VISHAY"
+  },
+  "expected_todo": {
+    "mpn": "RCS06034K99FKEA",
+    "original_qty": 25,
+    "date_code": "2325"
+  },
+  "todo_reason": "Vishay's 2D code only holds a shipment ID; PN/qty are in 1D codes too blurry to read"
+}

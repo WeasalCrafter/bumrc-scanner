@@ -1,0 +1,10 @@
+{
+  "description": "Newark bag, JST EHR-3 connector housing",
+  "distributor": "NEWARK",
+  "expected": {
+    "distributor": "NEWARK",
+    "mpn": "EHR-3",
+    "distributor_pn": "53X3136",
+    "original_qty": 50
+  }
+}

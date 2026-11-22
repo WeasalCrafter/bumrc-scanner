@@ -1,0 +1,141 @@
+{
+ "Product": {
+  "Description": {
+   "ProductDescription": "DIODE SCHOTTKY 40V 1A DO41",
+   "DetailedDescription": "Diode 40 V 1A Through Hole DO-41"
+  },
+  "Manufacturer": {
+   "Id": 497,
+   "Name": "STMicroelectronics"
+  },
+  "ManufacturerProductNumber": "1N5819",
+  "ProductUrl": "https://www.digikey.com/en/products/detail/stmicroelectronics/1N5819/1037326",
+  "DatasheetUrl": "https://www.st.com/content/ccc/resource/technical/document/datasheet/26/db/14/60/52/47/47/5b/CD00001625.pdf/files/CD00001625.pdf/jcr:content/translations/en.CD00001625.pdf",
+  "Parameters": [
+   {
+    "ParameterId": 570,
+    "ParameterText": "Technology",
+    "ParameterType": "String",
+    "ValueId": "400378",
+    "ValueText": "Schottky"
+   },
+   {
+    "ParameterId": 2071,
+    "ParameterText": "Voltage - DC Reverse (Vr) (Max)",
+    "ParameterType": "UnitOfMeasure",
+    "ValueId": "40 V",
+    "ValueText": "40 V"
+   },
+   {
+    "ParameterId": 914,
+    "ParameterText": "Current - Average Rectified (Io)",
+    "ParameterType": "String",
+    "ValueId": "119750",
+    "ValueText": "1A"
+   },
+   {
+    "ParameterId": 2261,
+    "ParameterText": "Voltage - Forward (Vf) (Max) @ If",
+    "ParameterType": "CoupledUnitOfMeasure",
+    "ValueId": "550 mV @ 1 A",
+    "ValueText": "550 mV @ 1 A"
+   },
+   {
+    "ParameterId": 143,
+    "ParameterText": "Speed",
+    "ParameterType": "String",
+    "ValueId": "346289",
+    "ValueText": "Fast Recovery =< 500ns, > 200mA (Io)"
+   },
+   {
+    "ParameterId": 2269,
+    "ParameterText": "Current - Reverse Leakage @ Vr",
+    "ParameterType": "CoupledUnitOfMeasure",
+    "ValueId": "500 µA @ 40 V",
+    "ValueText": "500 µA @ 40 V"
+   },
+   {
+    "ParameterId": 718,
+    "ParameterText": "Capacitance @ Vr, F",
+    "ParameterType": "String",
+    "ValueId": "1",
+    "ValueText": "-"
+   },
+   {
+    "ParameterId": 69,
+    "ParameterText": "Mounting Type",
+    "ParameterType": "String",
+    "ValueId": "411897",
+    "ValueText": "Through Hole"
+   },
+   {
+    "ParameterId": 16,
+    "ParameterText": "Package / Case",
+    "ParameterType": "String",
+    "ValueId": "340075",
+    "ValueText": "DO-204AL, DO-41, Axial"
+   },
+   {
+    "ParameterId": 1291,
+    "ParameterText": "Supplier Device Package",
+    "ParameterType": "String",
+    "ValueId": "340171",
+    "ValueText": "DO-41"
+   },
+   {
+    "ParameterId": 1686,
+    "ParameterText": "Operating Temperature - Junction",
+    "ParameterType": "String",
+    "ValueId": "99686",
+    "ValueText": "150°C (Max)"
+   }
+  ],
+  "Category": {
+   "CategoryId": 19,
+   "ParentId": 0,
+   "Name": "Discrete Semiconductor Products",
+   "ProductCount": 0,
+   "NewProductCount": 0,
+   "ChildCategories": [
+    {
+     "CategoryId": 2042,
+     "ParentId": 19,
+     "Name": "Diodes",
+     "ProductCount": 0,
+     "NewProductCount": 0,
+     "ChildCategories": [
+      {
+       "CategoryId": 2085,
+       "ParentId": 2042,
+       "Name": "Rectifiers",
+       "ProductCount": 0,
+       "NewProductCount": 0,
+       "ChildCategories": [
+        {
+         "CategoryId": 280,
+         "ParentId": 2085,
+         "Name": "Single Diodes",
+         "ProductCount": 0,
+         "NewProductCount": 0,
+         "ChildCategories": []
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "ProductVariations": [
+   {
+    "DigiKeyProductNumber": "497-6610-1-ND"
+   },
+   {
+    "DigiKeyProductNumber": "497-6610-3-ND"
+   }
+  ],
+  "Series": {
+   "Id": 818,
+   "Name": "-"
+  }
+ }
+}

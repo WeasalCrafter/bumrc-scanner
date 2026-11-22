@@ -1,0 +1,161 @@
+{
+ "Product": {
+  "Description": {
+   "ProductDescription": "COMMERCIAL GRADE,MLCC,0603,X7R,1",
+   "DetailedDescription": "1 µF ±10% 100V Ceramic Capacitor X7R 0603 (1608 Metric)"
+  },
+  "Manufacturer": {
+   "Id": 445,
+   "Name": "TDK"
+  },
+  "ManufacturerProductNumber": "C1608X7R2A105K080AC",
+  "ProductUrl": "https://www.digikey.com/en/products/detail/tdk/C1608X7R2A105K080AC/25982690",
+  "DatasheetUrl": "https://product.tdk.com/system/files/dam/doc/product/capacitor/ceramic/mlcc/catalog/mlcc_commercial_midvoltage_en.pdf",
+  "Parameters": [
+   {
+    "ParameterId": 2049,
+    "ParameterText": "Capacitance",
+    "ParameterType": "UnitOfMeasure",
+    "ValueId": "1 µF",
+    "ValueText": "1 µF"
+   },
+   {
+    "ParameterId": 3,
+    "ParameterText": "Tolerance",
+    "ParameterType": "String",
+    "ValueId": "1340",
+    "ValueText": "±10%"
+   },
+   {
+    "ParameterId": 14,
+    "ParameterText": "Voltage - Rated",
+    "ParameterType": "String",
+    "ValueId": "69629",
+    "ValueText": "100V"
+   },
+   {
+    "ParameterId": 17,
+    "ParameterText": "Temperature Coefficient",
+    "ParameterType": "String",
+    "ValueId": "422415",
+    "ValueText": "X7R"
+   },
+   {
+    "ParameterId": 252,
+    "ParameterText": "Operating Temperature",
+    "ParameterType": "String",
+    "ValueId": "242918",
+    "ValueText": "-55°C ~ 125°C"
+   },
+   {
+    "ParameterId": 5,
+    "ParameterText": "Features",
+    "ParameterType": "String",
+    "ValueId": "1",
+    "ValueText": "-"
+   },
+   {
+    "ParameterId": 707,
+    "ParameterText": "Ratings",
+    "ParameterType": "String",
+    "ValueId": "1",
+    "ValueText": "-"
+   },
+   {
+    "ParameterId": 405,
+    "ParameterText": "Applications",
+    "ParameterType": "String",
+    "ValueId": "350483",
+    "ValueText": "General Purpose"
+   },
+   {
+    "ParameterId": 1531,
+    "ParameterText": "Failure Rate",
+    "ParameterType": "String",
+    "ValueId": "1",
+    "ValueText": "-"
+   },
+   {
+    "ParameterId": 69,
+    "ParameterText": "Mounting Type",
+    "ParameterType": "String",
+    "ValueId": "409416",
+    "ValueText": "Surface Mount, MLCC"
+   },
+   {
+    "ParameterId": 16,
+    "ParameterText": "Package / Case",
+    "ParameterType": "String",
+    "ValueId": "39246",
+    "ValueText": "0603 (1608 Metric)"
+   },
+   {
+    "ParameterId": 46,
+    "ParameterText": "Size / Dimension",
+    "ParameterType": "String",
+    "ValueId": "7802",
+    "ValueText": "0.063\" L x 0.031\" W (1.60mm x 0.80mm)"
+   },
+   {
+    "ParameterId": 1500,
+    "ParameterText": "Height - Seated (Max)",
+    "ParameterType": "String",
+    "ValueId": "1",
+    "ValueText": "-"
+   },
+   {
+    "ParameterId": 1501,
+    "ParameterText": "Thickness (Max)",
+    "ParameterType": "String",
+    "ValueId": "6219",
+    "ValueText": "0.039\" (1.00mm)"
+   },
+   {
+    "ParameterId": 508,
+    "ParameterText": "Lead Spacing",
+    "ParameterType": "String",
+    "ValueId": "1",
+    "ValueText": "-"
+   },
+   {
+    "ParameterId": 4,
+    "ParameterText": "Lead Style",
+    "ParameterType": "String",
+    "ValueId": "1",
+    "ValueText": "-"
+   }
+  ],
+  "Category": {
+   "CategoryId": 3,
+   "ParentId": 0,
+   "Name": "Capacitors",
+   "ProductCount": 0,
+   "NewProductCount": 0,
+   "ChildCategories": [
+    {
+     "CategoryId": 60,
+     "ParentId": 3,
+     "Name": "Ceramic Capacitors",
+     "ProductCount": 0,
+     "NewProductCount": 0,
+     "ChildCategories": []
+    }
+   ]
+  },
+  "ProductVariations": [
+   {
+    "DigiKeyProductNumber": "445-C1608X7R2A105K080ACTR-ND"
+   },
+   {
+    "DigiKeyProductNumber": "445-C1608X7R2A105K080ACCT-ND"
+   },
+   {
+    "DigiKeyProductNumber": "445-C1608X7R2A105K080ACDKR-ND"
+   }
+  ],
+  "Series": {
+   "Id": 1054,
+   "Name": "C"
+  }
+ }
+}

@@ -1,0 +1,6 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = ["network: talks to real external APIs (run with -m network)"]
+addopts = "-m 'not network'"
+filterwarnings = ["ignore:Using `httpx` with `starlette.testclient`:DeprecationWarning"]

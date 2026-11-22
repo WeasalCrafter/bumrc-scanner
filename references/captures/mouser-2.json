@@ -1,0 +1,10 @@
+{
+  "description": "Mouser bag, Vishay 1k 0402 resistor",
+  "distributor": "MOUSER",
+  "expected": {
+    "distributor": "MOUSER",
+    "mpn": "CRCW04021K00FKEDC",
+    "original_qty": 1000,
+    "manufacturer": "Vishay"
+  }
+}

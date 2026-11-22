@@ -1,0 +1,69 @@
+/* page */
+body {
+    margin: 0;
+    font: 16px/1.4 Open-Sans, Arial, sans-serif;
+    color: #111;
+    background: #fff;
+}
+
+a { color: #6495ed; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* header bar */
+header {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    padding: .75em 1.5em;
+    border-bottom: 1px solid #111;
+}
+header h1 { font-size: 1.25em; margin: 0 auto 0 0; }
+header button { padding: 6px 10px; }
+
+.button {
+    padding: 8px 14px;
+    border: 3px solid #111;
+    color: #111;
+}
+.button:hover { text-decoration: none; background: #eee; }
+
+/* sidebar + main */
+.layout { display: flex; }
+
+nav {
+    flex: 0 0 200px;
+    padding: 1em .75em;
+    border-right: 1px solid #111;
+}
+nav a {
+    display: block;
+    padding: 8px 10px;
+    color: #111;
+    border: 1px solid transparent;
+}
+nav a.active { border-color: #111; font-weight: bold; }
+
+main { flex: 1; min-width: 0; padding: 1em 1.5em; }
+main h2 { margin: 0 0 .5em; }
+
+.search {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    font: inherit;
+    border: 3px solid #111;
+}
+
+/* parts table */
+table { width: 100%; border-collapse: collapse; margin-top: 1em; }
+th, td { padding: 8px 10px; border: 1px solid #111; text-align: left; vertical-align: top; }
+.qty { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.sub { color: #888; font-size: .8em; overflow-wrap: anywhere; }
+tr.empty { color: #999; }
+
+/* phones: sidebar goes above the table */
+@media (max-width: 640px) {
+    .layout { display: block; }
+    nav { border-right: 0; border-bottom: 1px solid #111; }
+    header, main { padding: .75em 1em; }
+}

@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=BUMRC Scanner Kiosk
+Comment=Open the parts scanner full screen at login
+Exec=sh -c "$HOME/inventory-scanner/deploy/kiosk.sh"
+X-GNOME-Autostart-enabled=true

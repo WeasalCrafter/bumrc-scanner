@@ -1,0 +1,11 @@
+{
+  "description": "Mouser bag, Panasonic 42.2k 0603 resistor",
+  "distributor": "MOUSER",
+  "expected": {},
+  "expected_todo": {
+    "distributor": "MOUSER",
+    "mpn": "ERA-3AEB4222V",
+    "original_qty": 50
+  },
+  "todo_reason": "2D code too blurry to decode at this resolution"
+}

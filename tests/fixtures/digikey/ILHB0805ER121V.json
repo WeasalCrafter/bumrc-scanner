@@ -1,0 +1,126 @@
+{
+ "Product": {
+  "Description": {
+   "ProductDescription": "FERRITE BEAD 120 OHM 0805 1LN",
+   "DetailedDescription": "120 Ohms @ 100 MHz 1 Ferrite Bead 0805 (2012 Metric) 5A 20mOhm"
+  },
+  "Manufacturer": {
+   "Id": 541,
+   "Name": "Vishay Dale"
+  },
+  "ManufacturerProductNumber": "ILHB0805ER121V",
+  "ProductUrl": "https://www.digikey.com/en/products/detail/vishay-dale/ILHB0805ER121V/2575017",
+  "DatasheetUrl": "https://www.vishay.com/docs/34102/ilhb.pdf",
+  "Parameters": [
+   {
+    "ParameterId": 21,
+    "ParameterText": "Filter Type",
+    "ParameterType": "String",
+    "ValueId": "1",
+    "ValueText": "-"
+   },
+   {
+    "ParameterId": 2169,
+    "ParameterText": "Number of Lines",
+    "ParameterType": "Double",
+    "ValueId": "1",
+    "ValueText": "1"
+   },
+   {
+    "ParameterId": 2280,
+    "ParameterText": "Impedance @ Frequency",
+    "ParameterType": "CoupledUnitOfMeasure",
+    "ValueId": "120 Ohms @ 100 MHz",
+    "ValueText": "120 Ohms @ 100 MHz"
+   },
+   {
+    "ParameterId": 1923,
+    "ParameterText": "Current Rating (Max)",
+    "ParameterType": "String",
+    "ValueId": "247706",
+    "ValueText": "5A"
+   },
+   {
+    "ParameterId": 1924,
+    "ParameterText": "DC Resistance (DCR) (Max)",
+    "ParameterType": "String",
+    "ValueId": "143329",
+    "ValueText": "20mOhm"
+   },
+   {
+    "ParameterId": 707,
+    "ParameterText": "Ratings",
+    "ParameterType": "String",
+    "ValueId": "1",
+    "ValueText": "-"
+   },
+   {
+    "ParameterId": 252,
+    "ParameterText": "Operating Temperature",
+    "ParameterType": "String",
+    "ValueId": "242918",
+    "ValueText": "-55°C ~ 125°C"
+   },
+   {
+    "ParameterId": 16,
+    "ParameterText": "Package / Case",
+    "ParameterType": "String",
+    "ValueId": "39329",
+    "ValueText": "0805 (2012 Metric)"
+   },
+   {
+    "ParameterId": 69,
+    "ParameterText": "Mounting Type",
+    "ParameterType": "String",
+    "ValueId": "409393",
+    "ValueText": "Surface Mount"
+   },
+   {
+    "ParameterId": 966,
+    "ParameterText": "Height (Max)",
+    "ParameterType": "String",
+    "ValueId": "6590",
+    "ValueText": "0.043\" (1.10mm)"
+   },
+   {
+    "ParameterId": 46,
+    "ParameterText": "Size / Dimension",
+    "ParameterType": "String",
+    "ValueId": "8569",
+    "ValueText": "0.079\" L x 0.049\" W (2.00mm x 1.25mm)"
+   }
+  ],
+  "Category": {
+   "CategoryId": 36,
+   "ParentId": 0,
+   "Name": "Filters",
+   "ProductCount": 0,
+   "NewProductCount": 0,
+   "ChildCategories": [
+    {
+     "CategoryId": 841,
+     "ParentId": 36,
+     "Name": "Ferrite Beads and Chips",
+     "ProductCount": 0,
+     "NewProductCount": 0,
+     "ChildCategories": []
+    }
+   ]
+  },
+  "ProductVariations": [
+   {
+    "DigiKeyProductNumber": "541-2299-2-ND"
+   },
+   {
+    "DigiKeyProductNumber": "541-2299-1-ND"
+   },
+   {
+    "DigiKeyProductNumber": "541-2299-6-ND"
+   }
+  ],
+  "Series": {
+   "Id": 28242,
+   "Name": "ILHB"
+  }
+ }
+}

@@ -1,0 +1,12 @@
+{
+  "description": "DigiKey bag, ST 1N5819 Schottky diode",
+  "distributor": "DIGIKEY",
+  "expected": {},
+  "expected_todo": {
+    "distributor": "DIGIKEY",
+    "distributor_pn": "497-6610-1-ND",
+    "mpn": "1N5819",
+    "original_qty": 20
+  },
+  "todo_reason": "2D code too blurry to decode at this resolution"
+}

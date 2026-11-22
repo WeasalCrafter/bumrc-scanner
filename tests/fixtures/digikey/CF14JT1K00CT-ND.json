@@ -1,0 +1,130 @@
+{
+ "Product": {
+  "Description": {
+   "ProductDescription": "RES 1K OHM 5% 1/4W AXIAL",
+   "DetailedDescription": "1 kOhms ±5% 0.25W, 1/4W Through Hole Resistor Axial Carbon Film"
+  },
+  "Manufacturer": {
+   "Id": 738,
+   "Name": "Stackpole Electronics Inc"
+  },
+  "ManufacturerProductNumber": "CF14JT1K00",
+  "ProductUrl": "https://www.digikey.com/en/products/detail/stackpole-electronics-inc/CF14JT1K00/1741314",
+  "DatasheetUrl": "https://www.seielect.com/catalog/SEI-CF_CFM.pdf",
+  "Parameters": [
+   {
+    "ParameterId": 2085,
+    "ParameterText": "Resistance",
+    "ParameterType": "UnitOfMeasure",
+    "ValueId": "1 kOhms",
+    "ValueText": "1 kOhms"
+   },
+   {
+    "ParameterId": 3,
+    "ParameterText": "Tolerance",
+    "ParameterType": "String",
+    "ValueId": "2503",
+    "ValueText": "±5%"
+   },
+   {
+    "ParameterId": 2,
+    "ParameterText": "Power (Watts)",
+    "ParameterType": "String",
+    "ValueId": "16543",
+    "ValueText": "0.25W, 1/4W"
+   },
+   {
+    "ParameterId": 174,
+    "ParameterText": "Composition",
+    "ParameterType": "String",
+    "ValueId": "326532",
+    "ValueText": "Carbon Film"
+   },
+   {
+    "ParameterId": 17,
+    "ParameterText": "Temperature Coefficient",
+    "ParameterType": "String",
+    "ValueId": "38807",
+    "ValueText": "0/ -400ppm/°C"
+   },
+   {
+    "ParameterId": 252,
+    "ParameterText": "Operating Temperature",
+    "ParameterType": "String",
+    "ValueId": "242934",
+    "ValueText": "-55°C ~ 155°C"
+   },
+   {
+    "ParameterId": 16,
+    "ParameterText": "Package / Case",
+    "ParameterType": "String",
+    "ValueId": "317190",
+    "ValueText": "Axial"
+   },
+   {
+    "ParameterId": 1291,
+    "ParameterText": "Supplier Device Package",
+    "ParameterType": "String",
+    "ValueId": "317190",
+    "ValueText": "Axial"
+   },
+   {
+    "ParameterId": 46,
+    "ParameterText": "Size / Dimension",
+    "ParameterType": "String",
+    "ValueId": "9167",
+    "ValueText": "0.091\" Dia x 0.236\" L (2.30mm x 6.00mm)"
+   },
+   {
+    "ParameterId": 1500,
+    "ParameterText": "Height - Seated (Max)",
+    "ParameterType": "String",
+    "ValueId": "1",
+    "ValueText": "-"
+   },
+   {
+    "ParameterId": 1127,
+    "ParameterText": "Number of Terminations",
+    "ParameterType": "Double",
+    "ValueId": "2",
+    "ValueText": "2"
+   },
+   {
+    "ParameterId": 1531,
+    "ParameterText": "Failure Rate",
+    "ParameterType": "String",
+    "ValueId": "1",
+    "ValueText": "-"
+   }
+  ],
+  "Category": {
+   "CategoryId": 2,
+   "ParentId": 0,
+   "Name": "Resistors",
+   "ProductCount": 0,
+   "NewProductCount": 0,
+   "ChildCategories": [
+    {
+     "CategoryId": 53,
+     "ParentId": 2,
+     "Name": "Through Hole Resistors",
+     "ProductCount": 0,
+     "NewProductCount": 0,
+     "ChildCategories": []
+    }
+   ]
+  },
+  "ProductVariations": [
+   {
+    "DigiKeyProductNumber": "CF14JT1K00TR-ND"
+   },
+   {
+    "DigiKeyProductNumber": "CF14JT1K00CT-ND"
+   }
+  ],
+  "Series": {
+   "Id": 3998,
+   "Name": "CF"
+  }
+ }
+}

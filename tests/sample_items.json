@@ -1,0 +1,6 @@
+[
+  {"item_id": 1, "item": {"name": "EHR-3 JST EH 3 pos housing", "mpn": "EHR-3"}},
+  {"item_id": 42, "item": {"name": "", "mpn": "CRCW04021K00FKEDC"}},
+  {"item_id": 142, "item": {"name": "1UF 100V X7R 0603 MLCC CAPACITOR TDK COMMERCIAL GRADE", "mpn": "C1608X7R2A105K080AC"}},
+  {"item_id": 99999999, "item": {"name": "SUPERCALIFRAGILISTICEXPIALIDOCIOUSPARTNUMBERWITHNOSPACES", "mpn": "X"}}
+]

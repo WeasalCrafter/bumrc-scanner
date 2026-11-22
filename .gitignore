@@ -1,0 +1,19 @@
+# secrets
+.env
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+
+# app data (camera settings, saved captures, printed labels)
+data/
+
+# editors / OS
+.*.swp
+*~
+.vscode/
+.idea/
+.DS_Store
