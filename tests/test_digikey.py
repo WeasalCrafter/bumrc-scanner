@@ -130,3 +130,47 @@ def test_ambiguous_mpn_resolved_by_label_manufacturer(label_maker):
 def test_same_manufacturer(a, b, same):
     from scanner.lookup.digikey import same_manufacturer
     assert same_manufacturer(a, b) is same
+
+
+# ---------------------------------------------------------------- labels that don't say which code is the MPN
+
+class CatalogDK(FakeDK):
+    """Knows exactly one part, like DigiKey would for an exact MPN."""
+    def __init__(self, known):
+        super().__init__()
+        self.known, self.asked = known, []
+
+    def details(self, pn):
+        self.asked.append(pn)
+        return product(pn) if pn == self.known else None
+
+    def exact_matches(self, mpn):
+        return []
+
+
+def label(*codes, **fields):
+    import json
+    return {"label_json": json.dumps({"codes": list(codes)}), **fields}
+
+
+@pytest.mark.parametrize("codes,mpn", [
+    # manufacturer labels: no distributor DataMatrix, the MPN is one of several 1D codes
+    (["Q5000", "1PRT0603BRE0724K9L", "1T2431A", "4LTW"], "RT0603BRE0724K9L"),
+    (["SG73G1JTTD1200D", "LOT 24A1", "5000", "2431"], "SG73G1JTTD1200D"),
+])
+def test_mpn_found_among_label_codes(codes, mpn):
+    out, problem, _ = enrich(label(*codes), CatalogDK(mpn))
+    assert problem is None and out["mpn"] == mpn and out["digikey_url"]
+
+
+def test_wrong_layout_guess_corrected_by_digikey():
+    # the shipment-label parser picked the lot code as the MPN; DigiKey knows the real one
+    fields = label("%0101RNOP0302961", "P0302961", "RCS06034K99FKEA", "2325", "1250", mpn="A2431LOT")
+    out, problem, _ = enrich(fields, CatalogDK("RCS06034K99FKEA"))
+    assert problem is None and out["mpn"] == "RCS06034K99FKEA"
+
+
+def test_guesses_are_limited_and_reported():
+    dk = CatalogDK("NOTONLABEL1")
+    out, problem, _ = enrich(label(*[f"ABC{i}X{i}" for i in range(20)]), dk)
+    assert len(dk.asked) <= 6 and "not found on DigiKey (tried" in problem

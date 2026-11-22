@@ -148,6 +148,47 @@ def mouser_pn(codes: list[Code], mpn: str | None) -> tuple[str | None, str | Non
     return None, None
 
 
+# 1D codes on manufacturer labels sometimes carry a data identifier in front
+# ("1PRT0603BRE0724K9L", "(1P)SG73G1JTTD1200D", "P/N: ..."); these are stripped
+PN_PREFIX_RE = re.compile(r"^(\(?(1P|30P|P)\)?|P/?N\s*:?|MPN\s*:?)\s*", re.I)
+PART_NUMBER_RE = re.compile(r"^[A-Z0-9][A-Z0-9\-+/.#,_]{3,39}$", re.I)
+
+
+def part_number_candidates(texts: list[str], exclude: tuple[str, ...] = ()) -> list[str]:
+    """Decoded values that could be a part number, most likely first.
+
+    Labels without a distributor DataMatrix (manufacturer labels: KOA, YAGEO, ...)
+    don't say which barcode is the part number. The lookup tries these in order
+    and keeps whichever one DigiKey recognises exactly."""
+    scored: dict[str, float] = {}
+    for raw in texts:
+        for t in _split_2d(raw):
+            t = t.strip()
+            m = PN_PREFIX_RE.match(t)
+            options = [t]
+            if m and m.group(0):
+                stripped = t[m.end():]
+                strong = m.group(0).strip("()").upper().startswith(("1P", "30P", "MPN", "PN", "P/N"))
+                options = [stripped, t] if strong else [t, stripped]
+            for rank, v in enumerate(options):
+                if not PART_NUMBER_RE.match(v) or v.isdigit() or v in exclude:
+                    continue
+                if not (re.search(r"[A-Z]", v, re.I) and re.search(r"\d", v)):
+                    continue                          # MPNs mix letters and digits
+                # longer, dash-containing values look more like part numbers than lot codes
+                score = min(len(v), 20) + (3 if "-" in v else 0) - 5 * rank + (5 if options[0] != t and rank == 0 else 0)
+                scored[v] = max(scored.get(v, -99), score)
+    return sorted(scored, key=lambda v: -scored[v])
+
+
+def _split_2d(text: str) -> list[str]:
+    """A non-ECIA 2D code may hold several fields; split on the usual separators."""
+    if text.startswith(ECIA_HEADER) or text.startswith(SHIPMENT_LABEL_PREFIX):
+        return []                                     # already parsed field by field
+    parts = re.split(r"[\x1d\x1e\x04;|\t\r\n]+|,(?=\S)|\s{2,}", text)
+    return [p for p in parts if p]
+
+
 @dataclass
 class ScanResult:
     fields: dict                      # API column -> value (None = not found)

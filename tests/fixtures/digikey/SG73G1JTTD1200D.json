@@ -1,0 +1,350 @@
+{
+ "SearchLocaleUsed": {
+  "Site": "US",
+  "Language": "en",
+  "Currency": "USD"
+ },
+ "Product": {
+  "Description": {
+   "ProductDescription": "RES 120 OHM 0.5% 1/3W 0603",
+   "DetailedDescription": "120 Ohms \u00b10.5% 0.333W, 1/3W Chip Resistor 0603 (1608 Metric) Automotive AEC-Q200, Moisture Resistant, Pulse Withstanding Thick Film"
+  },
+  "Manufacturer": {
+   "Id": 2019,
+   "Name": "KOA Speer Electronics, Inc."
+  },
+  "ManufacturerProductNumber": "SG73G1JTTD1200D",
+  "UnitPrice": 0.29,
+  "ProductUrl": "https://www.digikey.com/en/products/detail/koa-speer-electronics-inc/SG73G1JTTD1200D/16825015",
+  "DatasheetUrl": "https://www.koaspeer.com/pdfs/SG73G.pdf",
+  "PhotoUrl": "https://mm.digikey.com/Volume0/opasdata/d220001/medias/images/4732/MFG_SG73Gseries.jpg",
+  "ProductVariations": [
+   {
+    "DigiKeyProductNumber": "2019-SG73G1JTTD1200DTR-ND",
+    "PackageType": {
+     "Id": 1,
+     "Name": "Tape & Reel (TR)"
+    },
+    "StandardPricing": [
+     {
+      "BreakQuantity": 5000,
+      "UnitPrice": 0.05778,
+      "TotalPrice": 288.9
+     },
+     {
+      "BreakQuantity": 10000,
+      "UnitPrice": 0.05486,
+      "TotalPrice": 548.6
+     },
+     {
+      "BreakQuantity": 15000,
+      "UnitPrice": 0.05343,
+      "TotalPrice": 801.45
+     },
+     {
+      "BreakQuantity": 25000,
+      "UnitPrice": 0.05189,
+      "TotalPrice": 1297.25
+     },
+     {
+      "BreakQuantity": 35000,
+      "UnitPrice": 0.051,
+      "TotalPrice": 1785.0
+     },
+     {
+      "BreakQuantity": 50000,
+      "UnitPrice": 0.05016,
+      "TotalPrice": 2508.0
+     }
+    ],
+    "MyPricing": [],
+    "MarketPlace": false,
+    "TariffActive": true,
+    "Supplier": {
+     "Id": 2019,
+     "Name": "KOA Speer Electronics, Inc."
+    },
+    "QuantityAvailableforPackageType": 0,
+    "MaxQuantityForDistribution": 999999999,
+    "MinimumOrderQuantity": 5000,
+    "StandardPackage": 5000,
+    "DigiReelFee": 0.0
+   },
+   {
+    "DigiKeyProductNumber": "2019-SG73G1JTTD1200DCT-ND",
+    "PackageType": {
+     "Id": 2,
+     "Name": "Cut Tape (CT)"
+    },
+    "StandardPricing": [
+     {
+      "BreakQuantity": 1,
+      "UnitPrice": 0.29,
+      "TotalPrice": 0.29
+     },
+     {
+      "BreakQuantity": 10,
+      "UnitPrice": 0.157,
+      "TotalPrice": 1.57
+     },
+     {
+      "BreakQuantity": 25,
+      "UnitPrice": 0.1264,
+      "TotalPrice": 3.16
+     },
+     {
+      "BreakQuantity": 50,
+      "UnitPrice": 0.1092,
+      "TotalPrice": 5.46
+     },
+     {
+      "BreakQuantity": 100,
+      "UnitPrice": 0.0957,
+      "TotalPrice": 9.57
+     },
+     {
+      "BreakQuantity": 250,
+      "UnitPrice": 0.08196,
+      "TotalPrice": 20.49
+     },
+     {
+      "BreakQuantity": 500,
+      "UnitPrice": 0.07408,
+      "TotalPrice": 37.04
+     },
+     {
+      "BreakQuantity": 1000,
+      "UnitPrice": 0.06781,
+      "TotalPrice": 67.81
+     }
+    ],
+    "MyPricing": [],
+    "MarketPlace": false,
+    "TariffActive": true,
+    "Supplier": {
+     "Id": 2019,
+     "Name": "KOA Speer Electronics, Inc."
+    },
+    "QuantityAvailableforPackageType": 4165,
+    "MaxQuantityForDistribution": 999999999,
+    "MinimumOrderQuantity": 1,
+    "StandardPackage": 1,
+    "DigiReelFee": 0.0
+   },
+   {
+    "DigiKeyProductNumber": "2019-SG73G1JTTD1200DDKR-ND",
+    "PackageType": {
+     "Id": 243,
+     "Name": "Digi-Reel\u00ae"
+    },
+    "StandardPricing": [
+     {
+      "BreakQuantity": 1,
+      "UnitPrice": 0.29,
+      "TotalPrice": 0.29
+     },
+     {
+      "BreakQuantity": 10,
+      "UnitPrice": 0.157,
+      "TotalPrice": 1.57
+     },
+     {
+      "BreakQuantity": 25,
+      "UnitPrice": 0.1264,
+      "TotalPrice": 3.16
+     },
+     {
+      "BreakQuantity": 50,
+      "UnitPrice": 0.1092,
+      "TotalPrice": 5.46
+     },
+     {
+      "BreakQuantity": 100,
+      "UnitPrice": 0.0957,
+      "TotalPrice": 9.57
+     },
+     {
+      "BreakQuantity": 250,
+      "UnitPrice": 0.08196,
+      "TotalPrice": 20.49
+     },
+     {
+      "BreakQuantity": 500,
+      "UnitPrice": 0.07408,
+      "TotalPrice": 37.04
+     },
+     {
+      "BreakQuantity": 1000,
+      "UnitPrice": 0.06781,
+      "TotalPrice": 67.81
+     }
+    ],
+    "MyPricing": [],
+    "MarketPlace": false,
+    "TariffActive": true,
+    "Supplier": {
+     "Id": 2019,
+     "Name": "KOA Speer Electronics, Inc."
+    },
+    "QuantityAvailableforPackageType": 4165,
+    "MaxQuantityForDistribution": 999999999,
+    "MinimumOrderQuantity": 1,
+    "StandardPackage": 1,
+    "DigiReelFee": 7.0
+   }
+  ],
+  "QuantityAvailable": 4165,
+  "ProductStatus": {
+   "Id": 0,
+   "Status": "Active"
+  },
+  "BackOrderNotAllowed": false,
+  "NormallyStocking": true,
+  "Discontinued": false,
+  "EndOfLife": false,
+  "Ncnr": false,
+  "PrimaryVideoUrl": "",
+  "Parameters": [
+   {
+    "ParameterId": 2085,
+    "ParameterText": "Resistance",
+    "ParameterType": "UnitOfMeasure",
+    "ValueId": "120 Ohms",
+    "ValueText": "120 Ohms"
+   },
+   {
+    "ParameterId": 3,
+    "ParameterText": "Tolerance",
+    "ParameterType": "String",
+    "ValueId": "976",
+    "ValueText": "\u00b10.5%"
+   },
+   {
+    "ParameterId": 2,
+    "ParameterText": "Power (Watts)",
+    "ParameterType": "String",
+    "ValueId": "19368",
+    "ValueText": "0.333W, 1/3W"
+   },
+   {
+    "ParameterId": 174,
+    "ParameterText": "Composition",
+    "ParameterType": "String",
+    "ValueId": "411742",
+    "ValueText": "Thick Film"
+   },
+   {
+    "ParameterId": 5,
+    "ParameterText": "Features",
+    "ParameterType": "String",
+    "ValueId": "316926",
+    "ValueText": "Automotive AEC-Q200, Moisture Resistant, Pulse Withstanding"
+   },
+   {
+    "ParameterId": 17,
+    "ParameterText": "Temperature Coefficient",
+    "ParameterType": "String",
+    "ValueId": "2617",
+    "ValueText": "\u00b150ppm/\u00b0C"
+   },
+   {
+    "ParameterId": 252,
+    "ParameterText": "Operating Temperature",
+    "ParameterType": "String",
+    "ValueId": "242934",
+    "ValueText": "-55\u00b0C ~ 155\u00b0C"
+   },
+   {
+    "ParameterId": 16,
+    "ParameterText": "Package / Case",
+    "ParameterType": "String",
+    "ValueId": "39246",
+    "ValueText": "0603 (1608 Metric)"
+   },
+   {
+    "ParameterId": 1291,
+    "ParameterText": "Supplier Device Package",
+    "ParameterType": "String",
+    "ValueId": "39245",
+    "ValueText": "0603"
+   },
+   {
+    "ParameterId": 707,
+    "ParameterText": "Ratings",
+    "ParameterType": "String",
+    "ValueId": "1",
+    "ValueText": "-"
+   },
+   {
+    "ParameterId": 46,
+    "ParameterText": "Size / Dimension",
+    "ParameterType": "String",
+    "ValueId": "7802",
+    "ValueText": "0.063\" L x 0.031\" W (1.60mm x 0.80mm)"
+   },
+   {
+    "ParameterId": 1500,
+    "ParameterText": "Height - Seated (Max)",
+    "ParameterType": "String",
+    "ValueId": "5314",
+    "ValueText": "0.022\" (0.55mm)"
+   },
+   {
+    "ParameterId": 1127,
+    "ParameterText": "Number of Terminations",
+    "ParameterType": "Double",
+    "ValueId": "2",
+    "ValueText": "2"
+   },
+   {
+    "ParameterId": 1531,
+    "ParameterText": "Failure Rate",
+    "ParameterType": "String",
+    "ValueId": "1",
+    "ValueText": "-"
+   }
+  ],
+  "BaseProductNumber": {},
+  "Category": {
+   "CategoryId": 2,
+   "ParentId": 0,
+   "Name": "Resistors",
+   "ProductCount": 0,
+   "NewProductCount": 0,
+   "ImageUrl": "https://mm.digikey.com/Volume0/opasdata/d220001/derivates/3/002/639/316/FVT%20SERIES_tmb%2864x64%29.jpg",
+   "SeoDescription": "Products within this category include fixed-value (non-adjustable) resistors and related mounting accessories, organized according to their physical form factor or the method by which they are physically and electrically connected within an end application. Adjustable or variable-value resistors (also known as potentiometers or rheostats) are found separately, in a category of their own.",
+   "ChildCategories": [
+    {
+     "CategoryId": 52,
+     "ParentId": 2,
+     "Name": "Chip Resistor - Surface Mount",
+     "ProductCount": 0,
+     "NewProductCount": 0,
+     "ImageUrl": "https://mm.digikey.com/Volume0/opasdata/d220001/derivates/3/002/683/989/MFG_RMC%20SERIES_tmb%2864x64%29.jpg",
+     "SeoDescription": "Resistors provide opposition to current flow, in a manner that is proportional to the electric potential (voltage) imposed across them, and which is ideally unaffected by signal frequency or changes in temperature. Resistors described as surface mount chip types are designed to be affixed to the surface of a printed circuit board and incorporate a single resistor per device package.",
+     "ChildCategories": []
+    }
+   ]
+  },
+  "ManufacturerLeadWeeks": "8",
+  "ManufacturerPublicQuantity": 0,
+  "Series": {
+   "Id": 106613,
+   "Name": "SG73G"
+  },
+  "Classifications": {
+   "ReachStatus": "REACH Unaffected",
+   "RohsStatus": "ROHS3 Compliant",
+   "MoistureSensitivityLevel": "1  (Unlimited)",
+   "ExportControlClassNumber": "EAR99",
+   "HtsusCode": "8533.21.0030"
+  },
+  "OtherNames": [
+   "2019-SG73G1JTTD1200DTR",
+   "2019-SG73G1JTTD1200DDKR",
+   "2019-SG73G1JTTD1200DCT"
+  ]
+ },
+ "AccountIdUsed": 0,
+ "CustomerIdUsed": 0
+}
