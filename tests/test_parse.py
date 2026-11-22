@@ -45,3 +45,67 @@ def test_label_hash_same_label_same_hash_different_lot_different_hash():
     b = ecia("1PX", "Q5", "1TLOT2")
     assert label_hash([a]) == label_hash([ecia("1PX", "Q5", "1TLOT1")])
     assert label_hash([a]) != label_hash([b])
+
+
+# ---------------------------------------------------------------- shipment label ("%0101...")
+
+def code1d(text, x, y, hits=2):
+    """A 1D code centered at (x, y), 200 px wide."""
+    return Code("Code39", text.encode(), False, hits, corners=[(x - 100, y), (x + 100, y), (x + 100, y + 4), (x - 100, y + 4)])
+
+
+def shipment(*codes):
+    dm = Code("DataMatrix", b"%0101RNOP0302961", False, corners=[(0, 0), (50, 0), (50, 50), (0, 50)])
+    return [dm, *codes]
+
+
+def test_shipment_label_fields_by_shape():
+    # layout from the real label: PO, PN, then QTY + COO, DATE CODE, TRANS going down
+    r = interpret(shipment(code1d("ATTN MACK KEATING", 500, 100), code1d("ERJ-UP3F4701V", 500, 300),
+                           code1d("47", 300, 420), code1d("JP", 700, 420), code1d("2018", 300, 560),
+                           code1d("P0302961", 300, 700)))
+    f = r.fields
+    assert (f["mpn"], f["original_qty"], f["date_code"]) == ("ERJ-UP3F4701V", 47, "2018")
+    assert '"country_of_origin": "JP"' in f["label_json"] and '"transaction": "P0302961"' in f["label_json"]
+    # the label doesn't say who shipped it: the user picks the distributor
+    assert f["distributor"] is None and r.missing == ["distributor"]
+
+
+def test_shipment_label_qty_that_looks_like_a_date_code():
+    # qty 1250 is also a valid YYWW; the one nearest the part number is the quantity
+    r = interpret(shipment(code1d("RCS06034K99FKEA", 500, 300), code1d("2325", 300, 560), code1d("1250", 300, 420)))
+    assert (r.fields["original_qty"], r.fields["date_code"]) == (1250, "2325")
+
+
+def test_shipment_label_upside_down():
+    # same label rotated 180 degrees: positions mirrored, answer unchanged
+    r = interpret(shipment(code1d("RCS06034K99FKEA", 500, 700), code1d("2325", 700, 440), code1d("1250", 700, 580)))
+    assert (r.fields["original_qty"], r.fields["date_code"]) == (1250, "2325")
+
+
+def test_shipment_label_only_date_code_read():
+    r = interpret(shipment(code1d("ILHB0805ER121V", 500, 300), code1d("2431", 300, 560)))
+    assert r.fields["date_code"] == "2431" and r.fields["original_qty"] is None
+    assert r.missing == ["distributor", "original_qty"]
+
+
+# ---------------------------------------------------------------- Mouser part number
+
+def mouser(*extra, mpn=True):
+    fields = ["K31868955", "14K004"] + (["1PCRCW04021M60FKED"] if mpn else []) + ["Q100", "11K078440455", "4LIL", "1VVishay"]
+    return [ecia(*fields), *extra]
+
+
+def test_mouser_pn_matched_to_mpn():
+    r = interpret(mouser(Code("Code128", b"71-CRCW04021M60FKED", False), Code("Code128", b"31868955", False)))
+    assert r.fields["distributor_pn"] == "71-CRCW04021M60FKED" and r.fields["mpn"] == "CRCW04021M60FKED"
+
+
+def test_mouser_pn_fills_missing_mpn():
+    r = interpret(mouser(Code("Code128", b"710-744071039", False), mpn=False))
+    assert (r.fields["distributor_pn"], r.fields["mpn"]) == ("710-744071039", "744071039")
+
+
+def test_mouser_pn_not_matching_mpn_is_ignored():
+    r = interpret(mouser(Code("Code128", b"12-SOMETHINGELSE", False)))
+    assert r.fields["distributor_pn"] is None and r.fields["mpn"] == "CRCW04021M60FKED"

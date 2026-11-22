@@ -17,7 +17,8 @@ import zxingcpp
 F = zxingcpp.BarcodeFormat
 FORMATS = [F.DataMatrix, F.QRCode, F.Code128, F.Code39, F.Code93, F.EAN13, F.UPCA, F.PDF417]
 TWO_D = {"DataMatrix", "QRCode", "PDF417"}
-MIN_1D_LENGTH = 3        # shorter 1D reads are almost always fragments of a bigger code
+MIN_1D_LENGTH = 2        # quantities ("47") and country codes ("JP") are only 2 characters;
+                         # 1-character reads are almost always fragments of a bigger code
 
 
 @dataclass
@@ -92,7 +93,12 @@ def _read(img: np.ndarray, binarizer) -> Iterator[zxingcpp.Barcode]:
 def _keep(r: zxingcpp.Barcode) -> bool:
     if not r.valid:
         return False
-    return r.format.name in TWO_D or len(r.bytes) >= MIN_1D_LENGTH
+    if r.format.name in TWO_D:
+        return True
+    if len(r.bytes) < MIN_1D_LENGTH:
+        return False
+    # short reads of punctuation are noise; real 2-character codes are letters/digits
+    return len(r.bytes) > 2 or r.bytes.isalnum()
 
 
 def merge(codes: Iterable[Code]) -> list[Code]:

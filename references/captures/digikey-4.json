@@ -1,0 +1,11 @@
+{
+  "description": "DigiKey bag, Mini-Circuits ADTT4-1+ balun, phone photo",
+  "expected": {
+    "distributor": "DIGIKEY",
+    "distributor_pn": "3157-ADTT4-1+CT-ND",
+    "mpn": "ADTT4-1+",
+    "original_qty": 5,
+    "lot": "2333K1001U",
+    "date_code": "2333"
+  }
+}

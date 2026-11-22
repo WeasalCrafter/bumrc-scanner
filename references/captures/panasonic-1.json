@@ -1,0 +1,8 @@
+{
+  "description": "Panasonic ERJ-UP3F4701V 4.7k 0603 resistor, shipment label (2D code is a transaction number), Jetson camera full res",
+  "expected": {
+    "mpn": "ERJ-UP3F4701V",
+    "original_qty": 47,
+    "date_code": "2018"
+  }
+}

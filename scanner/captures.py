@@ -29,7 +29,8 @@ def save_capture(frame: np.ndarray, description: str, distributor: str | None, d
     folder = folder or config.CAPTURES_DIR
     folder.mkdir(parents=True, exist_ok=True)
     name = f"{datetime.now():%Y%m%d-%H%M%S}-{_slug(distributor or '')}-{_slug(description)}"
-    cv2.imwrite(str(folder / f"{name}.png"), frame)
+    # high-quality JPEG: camera frames arrive as MJPEG anyway, and it's ~8x smaller than PNG
+    cv2.imwrite(str(folder / f"{name}.jpg"), frame, [cv2.IMWRITE_JPEG_QUALITY, 95])
     sidecar = {"description": description, "distributor": distributor,
                "saved_at": datetime.now().isoformat(timespec="seconds"),
                "decoded": {k: decoded.get(k) for k in CHECK_FIELDS}, "expected": {}}

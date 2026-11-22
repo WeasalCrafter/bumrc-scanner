@@ -103,7 +103,7 @@ def test_camera_controls_settings_and_capture(client, tmp_path):
         "distributor": "NEWARK", "mpn": "EHR-3", "original_qty": "50", "lot": "LOT9"}}).json()
     assert spec["expected"] == {"distributor": "NEWARK", "mpn": "EHR-3", "original_qty": 50}
     assert spec["expected_todo"] == {"lot": "LOT9"}
-    assert (tmp_path / "captures" / f"{r['name']}.png").exists()
+    assert (tmp_path / "captures" / f"{r['name']}.jpg").exists()
     client.post("/api/camera/close")
 
 

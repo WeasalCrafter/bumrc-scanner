@@ -1,9 +1,7 @@
 {
   "description": "Vishay bag, ILHB0805ER121V ferrite bead",
   "distributor": "VISHAY",
-  "expected": {
-    "distributor": "VISHAY"
-  },
+  "expected": {},
   "expected_todo": {
     "mpn": "ILHB0805ER121V",
     "original_qty": 50,

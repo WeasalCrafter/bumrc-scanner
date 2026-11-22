@@ -68,9 +68,84 @@ def guess_distributor(di: dict[str, str], codes: list[Code]) -> str | None:
         return "NEWARK"
     if "1V" in di and "14K" in di:
         return "MOUSER"
-    if any(c.is_2d and c.text.startswith("%0101") for c in codes):
-        return "VISHAY"
+    # the "%0101..." shipment label is used by several manufacturers (Vishay, Panasonic, ...)
+    # and doesn't say who shipped it, so the user picks the distributor
     return None
+
+
+SHIPMENT_LABEL_PREFIX = "%0101"
+YYWW_RE = re.compile(r"^\d{2}(0[1-9]|[1-4]\d|5[0-3])$")       # date code: year + week 01-53
+MOUSER_PN_RE = re.compile(r"^(\d{2,4})-(\S+)$")                 # e.g. 71-CRCW04021M60FKED
+
+
+def _center(c: Code) -> tuple[float, float] | None:
+    if not c.corners:
+        return None
+    return (sum(x for x, _ in c.corners) / 4, sum(y for _, y in c.corners) / 4)
+
+
+def _distance(a: Code, b: Code) -> float:
+    ca, cb = _center(a), _center(b)
+    if not ca or not cb:
+        return 0.0
+    return ((ca[0] - cb[0]) ** 2 + (ca[1] - cb[1]) ** 2) ** 0.5
+
+
+def parse_shipment_label(codes: list[Code]) -> dict[str, str]:
+    """Fields from the label whose 2D code is just a transaction number ("%0101RNOP0302961").
+    Everything useful is in its unlabeled 1D barcodes, so each value is recognised by
+    its shape: PO has spaces, country is 2 letters, date code is YYWW, the part
+    number mixes letters and digits, and the quantity is the number printed right
+    below the part number (the closest numeric barcode to it)."""
+    dm = next((c.text for c in codes if c.is_2d and c.text.startswith(SHIPMENT_LABEL_PREFIX)), None)
+    if dm is None:
+        return {}
+    out: dict[str, str] = {}
+    numeric: list[Code] = []
+    parts: list[Code] = []
+    for c in sorted((c for c in codes if not c.is_2d), key=lambda c: -c.hits):
+        t = c.text.strip()
+        if t in dm:
+            out.setdefault("transaction", t)
+        elif " " in t:
+            out.setdefault("customer_po", t)
+        elif re.fullmatch(r"[A-Z]{2}", t):
+            out.setdefault("country_of_origin", t)
+        elif t.isdigit():
+            numeric.append(c)
+        elif re.search(r"[A-Z]", t, re.I) and re.search(r"\d", t) and len(t) >= 4:
+            parts.append(c)
+    mpn = max(parts, key=lambda c: (c.hits, len(c.text)), default=None)
+    if mpn:
+        out["mpn"] = mpn.text.strip()
+        numeric.sort(key=lambda c: _distance(c, mpn))    # quantity row sits right under the PN
+    dates = [c for c in numeric if YYWW_RE.match(c.text)]
+    if mpn and len(numeric) >= 2:
+        qty, rest = numeric[0], numeric[1:]
+        date = next((c for c in rest if YYWW_RE.match(c.text)), None)
+    else:
+        date = dates[0] if dates else None
+        qty = next((c for c in numeric if c is not date), None)
+    if qty:
+        out["qty"] = qty.text
+    if date:
+        out["date_code"] = date.text
+    return out
+
+
+def mouser_pn(codes: list[Code], mpn: str | None) -> tuple[str | None, str | None]:
+    """(Mouser part number, MPN) from Mouser's 1D barcodes. Mouser PNs are a
+    number, a dash, then usually the MPN (71-CRCW04021M60FKED), so a Mouser PN
+    can also fill in the MPN when Mouser's 2D code leaves it out."""
+    found = [(c.text, m.group(2)) for c in codes if not c.is_2d and (m := MOUSER_PN_RE.match(c.text))]
+    if mpn:
+        for text, tail in found:
+            if tail.upper() == mpn.upper():
+                return text, mpn
+        return None, mpn
+    if len(found) == 1:
+        return found[0][0], found[0][1]
+    return None, None
 
 
 @dataclass
@@ -121,7 +196,14 @@ def interpret(codes: list[Code]) -> ScanResult:
             named[name] = best[di]
 
     distributor = guess_distributor(best, codes)
+    if not best:                                     # no ECIA code: try the shipment label format
+        for k, v in parse_shipment_label(codes).items():
+            named.setdefault(k, v)
     distributor_pn = named.get("digikey_pn") if distributor == "DIGIKEY" else named.get("distributor_pn")
+    if distributor == "MOUSER" and not distributor_pn:
+        distributor_pn, mpn_from_pn = mouser_pn(codes, named.get("mpn"))
+        if mpn_from_pn:
+            named.setdefault("mpn", mpn_from_pn)
     qty = _int(named.get("qty"))
 
     fields = {
@@ -143,6 +225,7 @@ def interpret(codes: list[Code]) -> ScanResult:
             "country_of_origin": named.get("country_of_origin"),
             "customer_po": named.get("customer_po"),
             "invoice": named.get("invoice"),
+            "transaction": named.get("transaction"),
         }),
     }
 

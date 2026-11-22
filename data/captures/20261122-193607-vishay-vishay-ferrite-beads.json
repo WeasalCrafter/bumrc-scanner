@@ -11,9 +11,7 @@
     "lot": null,
     "date_code": null
   },
-  "expected": {
-    "distributor": "VISHAY"
-  },
+  "expected": {},
   "expected_todo": {
     "distributor_pn": "ILHB0805ER121V",
     "mpn": "ILHB0805ER121V",

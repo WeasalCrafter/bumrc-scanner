@@ -1,0 +1,10 @@
+{
+  "description": "Mouser bag, Vishay CRCW04021M60FKED 1.6M 0402 resistor, Jetson camera full res",
+  "expected": {
+    "distributor": "MOUSER",
+    "distributor_pn": "71-CRCW04021M60FKED",
+    "mpn": "CRCW04021M60FKED",
+    "manufacturer": "Vishay",
+    "original_qty": 100
+  }
+}
