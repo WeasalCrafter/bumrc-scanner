@@ -84,7 +84,57 @@ def test_live_detector_boxes_codes(mgr):
 def test_detector_pauses_while_busy(mgr):
     import time
     with mgr.busy():
-        mgr.show_codes([])
+        time.sleep(1.0)              # a decode already in progress may still finish
         v = mgr._overlay_version
         time.sleep(1.0)
         assert mgr._overlay_version == v
+
+
+class ResettingCamera(FileCamera):
+    """Like the Arducam may do: controls set before streaming starts are lost
+    when the first frame is read, and autofocus comes back on."""
+    def __init__(self, folder):
+        super().__init__(folder)
+        self.streaming = False
+
+    def open(self):
+        super().open()
+        self.streaming = False
+
+    def read(self):
+        if not self.streaming:
+            self.streaming = True
+            self.values.update(focus=0, autofocus=1, sharpness=50)
+        return super().read()
+
+
+def test_saved_settings_survive_stream_start_reset(tmp_path, monkeypatch):
+    monkeypatch.setattr("scanner.camera.manager.SETTLE_SECONDS", 0)
+    save_settings(tmp_path / "camera.json", {"autofocus": 0, "focus": 420, "sharpness": 80})
+    cam = ResettingCamera(REFERENCE_CAPTURES)
+    m = CameraManager(cam, tmp_path / "camera.json")
+    m.open()
+    try:
+        assert cam.values == {"focus": 420, "autofocus": 0, "sharpness": 80}
+        assert m.warnings == [] and m.settings_applied
+    finally:
+        m.close()
+
+
+class StubbornCamera(FileCamera):
+    """Accepts a focus value but silently keeps its own."""
+    def set(self, name, value):
+        if name != "focus":
+            super().set(name, value)
+
+
+def test_setting_that_wont_stick_is_reported(tmp_path, monkeypatch):
+    monkeypatch.setattr("scanner.camera.manager.SETTLE_SECONDS", 0)
+    save_settings(tmp_path / "camera.json", {"focus": 420})
+    m = CameraManager(StubbornCamera(REFERENCE_CAPTURES), tmp_path / "camera.json")
+    m.open()
+    try:
+        assert m.warnings == ["camera kept focus at 0 instead of the saved 420"]
+        assert not m.settings_applied
+    finally:
+        m.close()

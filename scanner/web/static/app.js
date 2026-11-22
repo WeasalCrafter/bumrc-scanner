@@ -196,6 +196,7 @@ function showReview(data) {
     if (data.codes) renderCodes(data.codes);
     const notes = [];
     if (data.codes && data.codes.length === 0) notes.push(["No codes found. Check focus (Camera tab) and rescan, or type the details in.", "err"]);
+    for (const w of data.camera_warnings || []) notes.push(["Camera settings: " + w, "warn"]);
     if (data.lookup_problem) notes.push(["DigiKey: " + data.lookup_problem, "warn"]);
     if (data.missing.length) notes.push(["Missing: " + data.missing.join(", "), "warn"]);
     $("review-msg").replaceChildren();

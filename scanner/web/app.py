@@ -209,6 +209,7 @@ def create_app(env: dict | None = None) -> FastAPI:
     @app.post("/api/scan")
     async def do_scan():
         await run_in_threadpool(run_camera, cam.open)
+        camera_warnings = list(cam.warnings)
         try:
             s = await run_in_threadpool(run_camera, scan, cam)
         finally:
@@ -216,6 +217,7 @@ def create_app(env: dict | None = None) -> FastAPI:
         fields, problem = await run_in_threadpool(enrich, s.result.fields, dk)
         app.state.snapshot = s.snapshot
         return {"fields": fields, "missing": missing(fields), "lookup_problem": problem,
+                "camera_warnings": camera_warnings,
                 "codes": [c.to_dict() for c in s.result.codes], "frames": s.frames, "seconds": s.seconds}
 
     @app.get("/api/scan/snapshot.jpg")

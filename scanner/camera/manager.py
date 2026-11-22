@@ -24,6 +24,7 @@ PREVIEW_WIDTH = 960       # the browser preview is downscaled; decoding uses ful
 PREVIEW_QUALITY = 70
 OVERLAY_SECONDS = 2.0     # boxes stay on the preview this long after the last decode
 DETECT_INTERVAL = 0.3     # live detector: pause between decodes (it's CPU-heavy on the Jetson)
+SETTLE_SECONDS = 0.6      # after applying saved settings: let the focus motor get there
 
 
 def load_settings(path: Path) -> dict:
@@ -60,6 +61,7 @@ class CameraManager:
         self._overlay_version = 0
         self._detector: threading.Thread | None = None
         self.live_detect = True
+        self.settings_applied = True
 
     # ------------------------------------------------------------ open / close
 
@@ -73,10 +75,19 @@ class CameraManager:
                 return
             self.error = None
             self.camera.open()
-            self.warnings = self.apply(load_settings(self.settings_file).get("controls", {}))
             self._running = True
             self._thread = threading.Thread(target=self._grab_loop, name="camera", daemon=True)
             self._thread.start()
+            # Saved settings go on only once frames are flowing: USB cameras may reset
+            # controls (or turn autofocus back on) when the stream starts.
+            try:
+                self.wait_frame(timeout=8)
+            except RuntimeError:
+                self._running = False
+                self._thread.join(timeout=3)
+                self.camera.close()
+                raise
+            self.warnings = self.apply_saved()
             self._detector = threading.Thread(target=self._detect_loop, name="detect", daemon=True)
             self._detector.start()
 
@@ -95,12 +106,34 @@ class CameraManager:
     def apply(self, controls: dict[str, int]) -> list[str]:
         """Set controls; returns a message for each one the camera refused."""
         problems = []
-        # autofocus first, so a manual focus value isn't overridden by it
-        for name in sorted(controls, key=lambda n: n != "autofocus"):
+        # auto modes first, so manual focus/exposure values aren't overridden by them
+        for name in sorted(controls, key=lambda n: n not in ("autofocus", "auto_exposure")):
             try:
                 self.camera.set(name, controls[name])
             except RuntimeError as e:
                 problems.append(str(e))
+        return problems
+
+    def _not_applied(self, wanted: dict[str, int]) -> dict[str, tuple[int, int]]:
+        """Controls whose value on the camera differs from `wanted`: name -> (wanted, actual)."""
+        actual = {k: c.value for k, c in self.camera.controls().items()}
+        return {k: (v, actual[k]) for k, v in wanted.items() if k in actual and actual[k] != v}
+
+    def apply_saved(self) -> list[str]:
+        """Apply camera.json, check the camera really took the values, retry once,
+        and wait for the lens to finish moving. Returns warnings for the UI."""
+        wanted = {k: int(v) for k, v in load_settings(self.settings_file).get("controls", {}).items()}
+        if not wanted:
+            return []
+        problems = self.apply(wanted)
+        time.sleep(SETTLE_SECONDS)
+        off = self._not_applied(wanted)
+        if off:                                   # some cameras need a second try once streaming
+            problems = self.apply({k: wanted[k] for k in off})
+            time.sleep(SETTLE_SECONDS)
+            off = self._not_applied(wanted)
+        problems += [f"camera kept {k} at {got} instead of the saved {want}" for k, (want, got) in off.items()]
+        self.settings_applied = not off
         return problems
 
     # ------------------------------------------------------------ frames
