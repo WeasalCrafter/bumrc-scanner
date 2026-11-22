@@ -1,5 +1,5 @@
 """Bag labels on the Brother QL-820NWB: part name, a Code128 barcode of the
-inventory ID, the ID in text, and the MRC logo.
+inventory ID ("BUMRC-000142"), the same text below it, and the MRC logo.
 
     img = create_label(item, item_id)    # pillow image, no printer needed
     print_label(img)                     # sends it to the label maker
@@ -76,14 +76,22 @@ def _name_lines(name: str, font, max_lines: int = 2) -> list[str]:
     return lines
 
 
+ID_PREFIX = "BUMRC-"
+
+
+def format_id(item_id: int) -> str:
+    """Inventory ID as printed and encoded on labels: 142 -> 'BUMRC-000142'."""
+    return f"{ID_PREFIX}{int(item_id):06d}"
+
+
 def create_label(item: dict, item_id: int) -> Image.Image:
     """Label image for one inventory item. item_id is the number the inventory
-    server gave it (shown as an 8-digit 'ID: 00000142' and encoded in the barcode)."""
+    server gave it (printed and encoded in the barcode as 'BUMRC-000142')."""
     if item_id is None:
         raise ValueError("no inventory ID yet (the item has to be on the server first)")
 
     name = item.get("name") or item.get("mpn") or ""
-    id_text = f"ID: {int(item_id):08d}"
+    id_text = format_id(item_id)
 
     # Code128 as a string of '1'/'0' modules, stretched to fill the space between the margins
     encoded = barcode.get("code128", id_text).build()[0]

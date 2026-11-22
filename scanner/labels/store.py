@@ -16,7 +16,7 @@ def save_label(img: Image.Image, item_id: int, out_dir: Path | None = None, keep
     out_dir = out_dir or config.OUT_DIR
     out_dir.mkdir(parents=True, exist_ok=True)
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S-%f")
-    path = out_dir / f"label_{int(item_id):08d}_{stamp}.png"
+    path = out_dir / f"label_BUMRC-{int(item_id):06d}_{stamp}.png"
     img.save(path)
     labels = sorted(out_dir.glob("label_*.png"), key=lambda p: p.stat().st_mtime_ns)
     for old in labels[:-keep]:

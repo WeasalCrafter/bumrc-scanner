@@ -84,7 +84,7 @@ def upload(fields: dict, member: str, env: dict | None = None, client: httpx.Cli
     if r.status_code == 201 and isinstance(body.get("id"), int):
         return body["id"]
     if r.status_code == 409:
-        raise UploadError(f"this bag is already in the inventory as ID {body.get('id', 0):08d}", body.get("id"))
+        raise UploadError(f"this bag is already in the inventory as BUMRC-{body.get('id', 0):06d}", body.get("id"))
     if r.status_code == 401:
         raise UploadError("the server rejected the API key (check INVENTORY_API_KEY)")
     raise UploadError(f"server refused the upload ({r.status_code}): {body.get('error') or r.text[:200]}")

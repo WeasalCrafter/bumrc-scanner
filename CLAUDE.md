@@ -131,7 +131,7 @@ to save to a local file that the app pulls settings from. Closes camera when don
 
 This should not be designed in one go, make it in chunks
 
-First, make the local application for scanning and decoding and adapt the printing code to hook into it (the printing code can be changed, but the layout of the label must not)
+First, make the local application for scanning and decoding and adapt the printing code to hook into it (the printing code can be changed, but the layout of the label must not). The one approved change: the ID is printed and encoded in the barcode as "BUMRC-XXXXXX" (6-digit, zero-padded), with no "ID:" text. The phone scanner must accept this format.
 
 Then once this is complete, we move on to the database and inventory web ui. For now, ignoring the user scanner portion of the web ui.
 

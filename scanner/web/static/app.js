@@ -67,7 +67,7 @@ function msg(container, text, kind = "err") {
     el.append(div);
 }
 
-function pad8(n) { return String(n).padStart(8, "0"); }
+function formatId(n) { return "BUMRC-" + String(n).padStart(6, "0"); }   // same as on the label
 
 function busy(button, on, text) {
     if (on) { button.dataset.label = button.textContent; button.textContent = text || "Working…"; }
@@ -275,7 +275,7 @@ async function doUpload() {
     try {
         const r = await api("POST", "/api/upload", { fields, member });
         itemId = r.id;
-        $("item-id").textContent = pad8(itemId);
+        $("item-id").textContent = formatId(itemId);
         $("label-name").value = fields.name || fields.mpn || "";
         $("btn-finish").hidden = true;
         $("btn-print").textContent = "Print label";
@@ -312,7 +312,7 @@ async function doPrint() {
 }
 
 function doFinish() {
-    $("done-msg").textContent = `Bag ${pad8(itemId)} is in the inventory. You can move on to the next one.`;
+    $("done-msg").textContent = `Bag ${formatId(itemId)} is in the inventory. You can move on to the next one.`;
     showView("none", "Ready for the next bag");
     showStep("done");
 }

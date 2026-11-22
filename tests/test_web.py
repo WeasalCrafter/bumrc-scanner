@@ -65,7 +65,7 @@ def test_upload_success_and_errors(client, monkeypatch):
     assert calls[0]["member"] == "Sam" and calls[0]["qty_remaining"] == 50 and calls[0]["value_num"] == 4990.0
 
     r = client.post("/api/upload", json={"fields": {**fields, "mpn": "DUP"}, "member": "Sam"})
-    assert r.status_code == 502 and "00000007" in r.json()["detail"]["message"]
+    assert r.status_code == 502 and "BUMRC-000007" in r.json()["detail"]["message"]
 
     r = client.post("/api/upload", json={"fields": fields, "member": ""})
     assert r.status_code == 502 and "your name" in r.json()["detail"]["message"]
